@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+/*
+ * ALOFT design tokens.
+ * Palette and type come from the brand guideline (boards 07-09); layout
+ * metrics (1120px content width, 16px card radius, 80px section rhythm,
+ * tight display tracking) mirror the Tempra reference template.
+ */
+@theme {
+  --color-petrol: #0a3442;
+  --color-copper: #b05a30;
+  --color-copper-dark: #964b27;
+  --color-supply: #1b7c90;
+  --color-ice: #dcecef;
+  --color-paper: #f2f5f6;
+  --color-white: #ffffff;
+  /* Petrol at 75% on white: secondary text with >= 5:1 contrast on Paper. */
+  --color-muted: #476771;
+  /* Functional error colour for form validation only. */
+  --color-error: #b42318;
+
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --radius-card: 16px;
+  --radius-media: 12px;
+
+  --shadow-card: 0 1px 2px rgb(10 52 66 / 0.04), 0 4px 16px rgb(10 52 66 / 0.06);
+
+  --animate-marquee: marquee 40s linear infinite;
+  /* Above-the-fold entrance: CSS only, so it never waits for hydration. */
+  --animate-rise: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper font-sans text-petrol antialiased;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background: var(--color-ice);
+    color: var(--color-petrol);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-supply);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  [id] {
+    scroll-margin-top: 96px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+
+/* Six-level hierarchy (board 08), scaled to the reference template. */
+@utility type-display {
+  @apply text-[2.75rem] leading-[1] font-semibold tracking-[-0.035em] md:text-[3.75rem] lg:text-[4.5rem] lg:leading-[0.98];
+}
+@utility type-headline {
+  @apply text-[2.25rem] leading-[1.04] font-semibold tracking-[-0.03em] md:text-[2.75rem] lg:text-[3rem];
+}
+@utility type-title {
+  @apply text-[1.5rem] leading-[1.15] font-medium tracking-[-0.02em] md:text-[1.75rem];
+}
+@utility type-subhead {
+  @apply text-lg leading-snug font-medium md:text-xl;
+}
+@utility type-body {
+  @apply text-[0.9375rem] leading-[1.6] text-muted md:text-base;
+}
+@utility type-label {
+  @apply font-mono text-[0.8125rem] leading-none font-medium tracking-[0.12em] uppercase;
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-[1200px] px-5 md:px-10;
+}
+@utility container-wide {
+  @apply mx-auto w-full max-w-[1440px] px-5 md:px-10;
+}
+@utility section {
+  @apply py-16 md:py-20 lg:py-24;
+}
+
+@utility card {
+  @apply rounded-[var(--radius-card)] border border-ice bg-white shadow-[var(--shadow-card)];
+}
+
+@layer components {
+  .prose-legal h2 {
+    @apply type-title mt-12 mb-4;
+  }
+  .prose-legal p {
+    @apply type-body mb-4 max-w-[68ch];
+  }
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}

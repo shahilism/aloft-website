@@ -1,0 +1,48 @@
+# Local stack: PostgreSQL, the NestJS API and the Next.js site.
+#   docker compose up -d db        # database only (for npm run dev)
+#   docker compose up -d --build   # everything
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: aloft
+      POSTGRES_PASSWORD: aloft
+      POSTGRES_DB: aloft
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U aloft -d aloft']
+      interval: 5s
+      retries: 10
+
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://aloft:aloft@db:5432/aloft?schema=public
+      CORS_ORIGINS: http://localhost:3000
+      IP_HASH_SALT: local-compose-salt-change-me
+      SWAGGER_ENABLED: 'true'
+    ports:
+      - '4000:4000'
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        NEXT_PUBLIC_API_URL: http://localhost:4000
+    depends_on: [api]
+    environment:
+      API_INTERNAL_URL: http://api:4000
+    ports:
+      - '3000:3000'
+
+volumes:
+  pgdata:

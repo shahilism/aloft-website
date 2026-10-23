@@ -1,0 +1,860 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "API and database are available.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Database is unreachable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/services": {
+      "get": {
+        "operationId": "ServicesController_list_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceListResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Services"
+        ]
+      }
+    },
+    "/api/v1/services/{slug}": {
+      "get": {
+        "operationId": "ServicesController_get_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Services"
+        ]
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "operationId": "ProjectsController_list_v1",
+        "parameters": [
+          {
+            "name": "service",
+            "required": false,
+            "in": "query",
+            "description": "Filter by related service page slug",
+            "schema": {
+              "example": "vrf-vrv-systems",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Published project case studies.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/api/v1/projects/{slug}": {
+      "get": {
+        "operationId": "ProjectsController_get_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/api/v1/contact": {
+      "post": {
+        "description": "Validates and stores an enquiry, then notifies ALOFT by email when SMTP is configured. Limited to 5 submissions per client every 10 minutes.",
+        "operationId": "ContactController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEnquiryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnquiryReceiptResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed; see details per field.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The enquiry could not be stored.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Submit a project enquiry",
+        "tags": [
+          "Contact"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "ALOFT Website API",
+    "description": "Public REST API behind the ALOFT Centralized Cooling Solutions website: project case studies, service content, enquiries and health.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "HealthChecks": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ]
+          }
+        },
+        "required": [
+          "database"
+        ]
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded"
+            ]
+          },
+          "uptime": {
+            "type": "number",
+            "example": 1234.5,
+            "description": "Process uptime in seconds"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "checks": {
+            "$ref": "#/components/schemas/HealthChecks"
+          }
+        },
+        "required": [
+          "status",
+          "uptime",
+          "timestamp",
+          "checks"
+        ]
+      },
+      "ServiceImageDto": {
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "example": "/images/service-ducting.jpg"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "src",
+          "alt",
+          "width",
+          "height"
+        ]
+      },
+      "ServiceDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "hvac-ducting"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ductable AC & ducting"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "intro": {
+            "type": "string"
+          },
+          "covers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cta": {
+            "type": "string"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "metaDescription": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "example": "/services/hvac-ducting"
+          },
+          "image": {
+            "$ref": "#/components/schemas/ServiceImageDto"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "summary",
+          "headline",
+          "intro",
+          "covers",
+          "cta",
+          "seoTitle",
+          "metaDescription",
+          "path",
+          "image"
+        ]
+      },
+      "CountMeta": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "count"
+        ]
+      },
+      "ServiceListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/CountMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "ServiceResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ServiceDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "FieldError": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "example": "email"
+          },
+          "messages": {
+            "example": [
+              "Enter a valid business email address."
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "field",
+          "messages"
+        ]
+      },
+      "ApiErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation failed"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            }
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/v1/contact"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2026-10-22T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "statusCode",
+          "error",
+          "message",
+          "path",
+          "timestamp"
+        ]
+      },
+      "ProjectImageDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "alt": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cover",
+              "before",
+              "after",
+              "gallery"
+            ]
+          },
+          "width": {
+            "type": "number",
+            "nullable": true
+          },
+          "height": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "url",
+          "alt",
+          "kind",
+          "width",
+          "height"
+        ]
+      },
+      "ProjectSummaryDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "vrf-vrv-installation"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "buildingType": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "string",
+            "nullable": true
+          },
+          "servicesProvided": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "serviceSlugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "beforeImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "afterImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "isDraft": {
+            "type": "boolean",
+            "description": "True only when drafts are exposed for local preview"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "buildingType",
+          "location",
+          "system",
+          "capacity",
+          "servicesProvided",
+          "serviceSlugs",
+          "coverImage",
+          "beforeImage",
+          "afterImage",
+          "isDraft"
+        ]
+      },
+      "ProjectListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummaryDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/CountMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "ProjectDetailDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "vrf-vrv-installation"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "buildingType": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "system": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "string",
+            "nullable": true
+          },
+          "servicesProvided": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "serviceSlugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "beforeImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "afterImage": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectImageDto"
+              }
+            ]
+          },
+          "isDraft": {
+            "type": "boolean",
+            "description": "True only when drafts are exposed for local preview"
+          },
+          "challenge": {
+            "type": "string"
+          },
+          "solution": {
+            "type": "string"
+          },
+          "execution": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectImageDto"
+            }
+          },
+          "completedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "buildingType",
+          "location",
+          "system",
+          "capacity",
+          "servicesProvided",
+          "serviceSlugs",
+          "coverImage",
+          "beforeImage",
+          "afterImage",
+          "isDraft",
+          "challenge",
+          "solution",
+          "execution",
+          "outcome",
+          "images",
+          "completedAt",
+          "updatedAt"
+        ]
+      },
+      "ProjectResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProjectDetailDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CreateEnquiryDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Anil Kumar",
+            "minLength": 2,
+            "maxLength": 100
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Example Developers Pvt Ltd",
+            "maxLength": 120
+          },
+          "email": {
+            "type": "string",
+            "example": "facilities@example.com",
+            "maxLength": 254
+          },
+          "phone": {
+            "type": "string",
+            "example": "+91 95449 27508"
+          },
+          "projectLocation": {
+            "type": "string",
+            "example": "Perinthalmanna, Malappuram"
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "hvac-design",
+              "vrf-vrv",
+              "ducting",
+              "chilled-water",
+              "amc",
+              "upgrade",
+              "other"
+            ]
+          },
+          "buildingType": {
+            "type": "string",
+            "enum": [
+              "office",
+              "coworking",
+              "education",
+              "hospitality",
+              "retail",
+              "healthcare",
+              "industrial",
+              "other"
+            ]
+          },
+          "approxArea": {
+            "type": "string",
+            "example": "18,000 sq ft",
+            "maxLength": 60
+          },
+          "projectStage": {
+            "type": "string",
+            "enum": [
+              "planning",
+              "construction",
+              "upgrade",
+              "maintenance",
+              "unsure"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 3000
+          },
+          "sourcePath": {
+            "type": "string",
+            "example": "/services/hvac-amc"
+          },
+          "website": {
+            "type": "string",
+            "description": "Honeypot. Leave empty."
+          },
+          "startedAt": {
+            "type": "number",
+            "description": "Epoch milliseconds when the form was rendered."
+          }
+        },
+        "required": [
+          "fullName",
+          "email",
+          "phone",
+          "projectLocation",
+          "service",
+          "buildingType",
+          "projectStage",
+          "message"
+        ]
+      },
+      "EnquiryReceipt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "receivedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "receivedAt"
+        ]
+      },
+      "EnquiryReceiptResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/EnquiryReceipt"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      }
+    }
+  }
+}
