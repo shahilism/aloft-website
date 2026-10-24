@@ -14,8 +14,6 @@ import { CtaBand } from '@/components/sections/CtaBand';
 import { pageMetadata } from '@/lib/seo';
 import { faqJsonLd } from '@/lib/structured-data';
 
-export const revalidate = 300;
-
 export const metadata = pageMetadata({ title: home.seoTitle, description: home.metaDescription, path: '/' });
 
 export default function HomePage() {

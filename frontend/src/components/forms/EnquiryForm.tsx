@@ -17,14 +17,24 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/cn';
-import { publicApiUrl } from '@/lib/env';
-import { toPayload, validateEnquiry, type EnquiryFormValues, type FieldErrors } from '@/lib/enquiry-validation';
+import { formEndpoint } from '@/lib/env';
+import {
+  toMailto,
+  toSubmission,
+  validateEnquiry,
+  type EnquiryFormValues,
+  type FieldErrors,
+} from '@/lib/enquiry-validation';
 
 type Status =
   | { kind: 'idle' }
   | { kind: 'submitting' }
-  | { kind: 'success'; reference: string }
+  | { kind: 'success' }
+  | { kind: 'handoff' }
   | { kind: 'error'; message: string };
+
+/** Submissions completed faster than this are treated as automated. */
+const MIN_FILL_MS = 3000;
 
 const empty: EnquiryFormValues = {
   fullName: '',
@@ -71,7 +81,7 @@ export function EnquiryForm({ defaultService, submitLabel = contactPage.submit }
   }, []);
 
   useEffect(() => {
-    if (status.kind === 'success' || status.kind === 'error') statusRef.current?.focus();
+    if (status.kind !== 'idle' && status.kind !== 'submitting') statusRef.current?.focus();
   }, [status.kind]);
 
   const set = (field: keyof EnquiryFormValues) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -89,44 +99,58 @@ export function EnquiryForm({ defaultService, submitLabel = contactPage.submit }
       return;
     }
 
+    // Likely automated: filled the hidden field or finished implausibly fast. Look successful, send nothing.
+    if (honeypot.current?.value || Date.now() - startedAt.current < MIN_FILL_MS) {
+      setStatus({ kind: 'success' });
+      return;
+    }
+
+    const submission = toSubmission(values, pathname);
+
+    if (!formEndpoint) {
+      window.location.href = toMailto(site.contact.email, submission);
+      setStatus({ kind: 'handoff' });
+      window.gtag?.('event', 'generate_lead', { form: 'enquiry', method: 'email', service: values.service });
+      return;
+    }
+
     setStatus({ kind: 'submitting' });
     try {
-      const res = await fetch(`${publicApiUrl}/api/v1/contact`, {
+      const res = await fetch(formEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(
-          toPayload(values, {
-            sourcePath: pathname,
-            website: honeypot.current?.value ?? '',
-            startedAt: startedAt.current,
-          }),
-        ),
+        body: JSON.stringify(submission),
         signal: AbortSignal.timeout(15000),
       });
-      const body = await res.json().catch(() => null);
-
-      if (res.status === 201) {
-        setStatus({ kind: 'success', reference: body?.data?.id ?? '' });
+      if (res.ok) {
+        setStatus({ kind: 'success' });
         window.gtag?.('event', 'generate_lead', { form: 'enquiry', service: values.service });
         return;
       }
-      if (res.status === 400 && Array.isArray(body?.details)) {
-        const serverErrors: FieldErrors = {};
-        for (const d of body.details as { field: keyof EnquiryFormValues; messages: string[] }[]) {
-          serverErrors[d.field] = d.messages[0];
-        }
-        setErrors(serverErrors);
-        setStatus({ kind: 'error', message: 'Please check the highlighted fields.' });
-        return;
-      }
-      if (res.status === 429) {
-        setStatus({ kind: 'error', message: 'Too many enquiries were sent from this connection. Please wait a few minutes, or contact us directly.' });
-        return;
-      }
-      setStatus({ kind: 'error', message: body?.message ?? 'Your enquiry could not be sent.' });
+      setStatus({ kind: 'error', message: 'Your enquiry could not be sent.' });
     } catch {
       setStatus({ kind: 'error', message: 'Your enquiry could not be sent because of a connection problem.' });
     }
+  }
+
+  if (status.kind === 'handoff') {
+    return (
+      <div ref={statusRef} tabIndex={-1} role="status" className="flex flex-col items-start gap-5 py-6 outline-none">
+        <span className="grid size-14 place-items-center rounded-full bg-ice text-supply">
+          <Icon name="mail" size={28} />
+        </span>
+        <h3 className="type-title">Send your enquiry from your email app</h3>
+        <p className="type-body">
+          Your email app should now be open with your enquiry filled in. Press send there to reach our team. If
+          nothing opened, email{' '}
+          <a className="underline" href={`mailto:${site.contact.email}`}>{site.contact.email}</a> or call{' '}
+          <a className="underline" href={`tel:${site.contact.phoneE164}`}>{site.contact.phoneDisplay}</a>.
+        </p>
+        <button type="button" onClick={() => setStatus({ kind: 'idle' })} className="text-[0.9375rem] font-medium text-supply underline">
+          Back to the form
+        </button>
+      </div>
+    );
   }
 
   if (status.kind === 'success') {
@@ -137,11 +161,6 @@ export function EnquiryForm({ defaultService, submitLabel = contactPage.submit }
         </span>
         <h3 className="type-title">Enquiry received</h3>
         <p className="type-body">{contactPage.confirmation}</p>
-        {status.reference && (
-          <p className="type-label text-muted">
-            Reference: <span className="normal-case tracking-normal">{status.reference.slice(0, 8).toUpperCase()}</span>
-          </p>
-        )}
       </div>
     );
   }

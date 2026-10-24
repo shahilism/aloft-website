@@ -9,7 +9,7 @@ import {
   homeServices,
   phonePattern,
   privacyPolicy,
-  projectDraftTemplates,
+  projects,
   projectsPage,
   serviceSlugToEnquiry,
   services,
@@ -68,10 +68,13 @@ test('copy follows brand writing rules', () => {
   assert.ok(!/\$\d/.test(copy), 'no US-dollar pricing');
 });
 
-test('draft project templates are clearly placeholders', () => {
-  for (const p of projectDraftTemplates) {
-    assert.match(p.buildingType, /^\[/);
-    assert.match(p.location, /^\[/);
+test('published projects are complete and contain no placeholders', () => {
+  const slugs = projects.map((p) => p.slug);
+  assert.equal(new Set(slugs).size, slugs.length);
+  for (const p of projects) {
+    assert.match(p.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.ok(!JSON.stringify(p).includes('['), `${p.slug} still has a [placeholder]`);
+    for (const img of p.images) assert.ok(img.alt.trim().length > 0, `${p.slug} image needs alt text`);
   }
 });
 

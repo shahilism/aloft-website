@@ -1,56 +1,46 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { projectsPage, type ProjectDetail } from '@aloft/content';
+import { getProject, projectCover, projectImage, projects, projectsPage } from '@aloft/content';
 import { JsonLd } from '@/components/JsonLd';
 import { CtaBand } from '@/components/sections/CtaBand';
-import { DraftBadge } from '@/components/sections/DraftBadge';
 import { PageHero } from '@/components/sections/PageHero';
 import { ProjectCard } from '@/components/sections/ProjectCard';
 import { BeforeAfter } from '@/components/ui/BeforeAfter';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHeader } from '@/components/ui/SectionHeader';
-import { getProject, getProjects } from '@/lib/api';
 import { pageMetadata } from '@/lib/seo';
 import { breadcrumbJsonLd } from '@/lib/structured-data';
 
 type Params = Promise<{ slug: string }>;
 
-export const revalidate = 300;
+export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const res = await getProjects();
-  return res.ok ? res.data.filter((p) => !p.isDraft).map((p) => ({ slug: p.slug })) : [];
-}
-
-async function load(slug: string): Promise<ProjectDetail> {
-  const res = await getProject(slug);
-  if (res.ok) return res.data;
-  if (res.status === 404) notFound();
-  // API unreachable: let the error boundary show a retry state instead of a false 404.
-  throw new Error('Project could not be loaded');
+export function generateStaticParams() {
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }) {
-  const res = await getProject((await params).slug);
-  if (!res.ok) return {};
-  const p = res.data;
+  const p = getProject((await params).slug);
+  if (!p) return {};
   return pageMetadata({
     title: `${p.title} | ALOFT Projects`,
     description: p.summary.slice(0, 160),
     path: `/projects/${p.slug}`,
-    image: p.coverImage?.url,
-    noindex: p.isDraft,
+    image: projectCover(p)?.url,
   });
 }
 
 /** Project case study (content draft, page 5 — individual project template). */
 export default async function ProjectPage({ params }: { params: Params }) {
-  const { slug } = await params;
-  const project = await load(slug);
-  const others = await getProjects();
-  const more = others.ok ? others.data.filter((p) => p.slug !== project.slug).slice(0, 2) : [];
+  const project = getProject((await params).slug);
+  if (!project) notFound();
+
+  const before = projectImage(project, 'before');
+  const after = projectImage(project, 'after');
+  const cover = projectCover(project);
   const gallery = project.images.filter((i) => i.kind === 'gallery');
+  const more = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
 
   const facts: { icon: IconName; label: string; value: string | null }[] = [
     { icon: 'building', label: 'Building type', value: project.buildingType },
@@ -61,23 +51,21 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
   return (
     <>
-      <PageHero title={project.title} body={project.summary}>
-        {project.isDraft && <DraftBadge className="mt-6 inline-block" />}
-      </PageHero>
+      <PageHero title={project.title} body={project.summary} />
 
       <div className="container-page">
         <div className="animate-rise [animation-delay:120ms]">
-          {project.beforeImage && project.afterImage ? (
+          {before && after ? (
             <BeforeAfter
-              before={project.beforeImage}
-              after={project.afterImage}
+              before={before}
+              after={after}
               priority
               sizes="(min-width: 1200px) 1120px, calc(100vw - 40px)"
               className="aspect-[4/3] md:aspect-[16/9]"
             />
-          ) : project.coverImage ? (
+          ) : cover ? (
             <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] md:aspect-[16/9]">
-              <Image src={project.coverImage.url} alt={project.coverImage.alt} fill priority sizes="(min-width: 1200px) 1120px, 100vw" className="object-cover" />
+              <Image src={cover.url} alt={cover.alt} fill priority sizes="(min-width: 1200px) 1120px, 100vw" className="object-cover" />
             </div>
           ) : null}
         </div>

@@ -1,7 +1,33 @@
 /**
- * Project API contract plus the case-study templates from the content draft.
- * The templates are seeded as unpublished drafts: they hold placeholders, not
- * ALOFT project facts, and must never be published as they are.
+ * Project case studies, rendered statically by the website.
+ *
+ * Publish only verified, client-approved projects with real site photographs
+ * (content draft, page 5). Until then the list stays empty and the site shows
+ * an honest "case studies are being documented" state.
+ *
+ * To add one, append an object like this (images live in
+ * frontend/public/images/projects/):
+ *
+ *   {
+ *     slug: 'office-vrf-malappuram',
+ *     title: 'VRF / VRV installation',
+ *     summary: 'One-paragraph summary approved for publication.',
+ *     buildingType: 'Commercial office',
+ *     location: 'Malappuram, Kerala',
+ *     system: 'VRF / VRV',
+ *     capacity: null,                       // only if verified and approved
+ *     servicesProvided: ['System selection', 'Refrigerant piping', 'Testing and commissioning'],
+ *     serviceSlugs: ['vrf-vrv-systems'],
+ *     challenge: 'The original requirement, constraints or documented issue.',
+ *     solution: 'The selected system, engineering considerations and scope delivered.',
+ *     execution: 'Installation and coordination work.',
+ *     outcome: 'Measured or verifiable outcomes only.',
+ *     images: [
+ *       { url: '/images/projects/office-vrf-before.jpg', alt: '...', kind: 'before', width: 1600, height: 1200 },
+ *       { url: '/images/projects/office-vrf-after.jpg', alt: '...', kind: 'after', width: 1600, height: 1200 },
+ *     ],
+ *     completedAt: '2026-03-01',
+ *   },
  */
 
 export type ProjectImageKind = 'cover' | 'before' | 'after' | 'gallery';
@@ -10,11 +36,11 @@ export interface ProjectImage {
   url: string;
   alt: string;
   kind: ProjectImageKind;
-  width: number | null;
-  height: number | null;
+  width: number;
+  height: number;
 }
 
-export interface ProjectSummary {
+export interface Project {
   slug: string;
   title: string;
   summary: string;
@@ -24,106 +50,25 @@ export interface ProjectSummary {
   capacity: string | null;
   servicesProvided: string[];
   serviceSlugs: string[];
-  coverImage: ProjectImage | null;
-  beforeImage: ProjectImage | null;
-  afterImage: ProjectImage | null;
-  isDraft: boolean;
-}
-
-export interface ProjectDetail extends ProjectSummary {
   challenge: string;
   solution: string;
   execution: string;
   outcome: string;
   images: ProjectImage[];
   completedAt: string | null;
-  updatedAt: string;
 }
 
-export interface ApiList<T> {
-  data: T[];
-  meta: { count: number };
+export const projects: Project[] = [];
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug);
 }
 
-export interface ApiItem<T> {
-  data: T;
+export function projectImage(p: Project, kind: ProjectImageKind): ProjectImage | null {
+  return p.images.find((i) => i.kind === kind) ?? null;
 }
 
-export interface ProjectSeed {
-  slug: string;
-  title: string;
-  summary: string;
-  buildingType: string;
-  location: string;
-  system: string;
-  capacity: string | null;
-  scope: string;
-  servicesProvided: string[];
-  serviceSlugs: string[];
-  challenge: string;
-  solution: string;
-  execution: string;
-  outcome: string;
-  sortOrder: number;
+/** Cover photo: an explicit cover, else the "after" photo, else the first image. */
+export function projectCover(p: Project): ProjectImage | null {
+  return projectImage(p, 'cover') ?? projectImage(p, 'after') ?? p.images[0] ?? null;
 }
-
-export const projectDraftTemplates: ProjectSeed[] = [
-  {
-    slug: 'commercial-hvac-installation',
-    title: 'Commercial HVAC installation',
-    summary: '[Short summary of the verified project, approved for publication]',
-    buildingType: '[Verified building type]',
-    location: '[Actual project location]',
-    system: '[Installed HVAC system]',
-    capacity: null,
-    scope: '[Work completed by ALOFT]',
-    servicesProvided: ['[Scope item 1]', '[Scope item 2]', '[Scope item 3]'],
-    serviceSlugs: ['hvac-design', 'hvac-ducting'],
-    challenge:
-      "[Explain the client's original cooling requirement, building constraints or documented system issue.]",
-    solution:
-      '[Describe the selected system, engineering considerations, equipment and actual scope delivered.]',
-    execution: '[Explain the installation or coordination work, with actual site photographs.]',
-    outcome:
-      '[Measured or verifiable outcomes only — completed capacity, area served, commissioning status or documented operational improvements.]',
-    sortOrder: 1,
-  },
-  {
-    slug: 'vrf-vrv-installation',
-    title: 'VRF / VRV installation',
-    summary: '[Short summary of the verified project, approved for publication]',
-    buildingType: '[Verified building type]',
-    location: '[Actual project location]',
-    system: 'VRF / VRV',
-    capacity: '[Verified capacity, if approved]',
-    scope: '[Actual installation scope]',
-    servicesProvided: ['[Scope item 1]', '[Scope item 2]', '[Scope item 3]'],
-    serviceSlugs: ['vrf-vrv-systems'],
-    challenge:
-      "[Explain the client's original cooling requirement, building constraints or documented system issue.]",
-    solution:
-      '[Describe the selected system, engineering considerations, equipment and actual scope delivered.]',
-    execution: '[Explain the installation or coordination work, with actual site photographs.]',
-    outcome:
-      '[Measured or verifiable outcomes only — completed capacity, area served, commissioning status or documented operational improvements.]',
-    sortOrder: 2,
-  },
-  {
-    slug: 'hvac-system-upgrade',
-    title: 'HVAC system upgrade',
-    summary: '[Short summary of the verified project, approved for publication]',
-    buildingType: '[Verified building type]',
-    location: '[Actual project location]',
-    system: '[Upgraded HVAC system]',
-    capacity: null,
-    scope: '[Verified work completed]',
-    servicesProvided: ['[Scope item 1]', '[Scope item 2]', '[Scope item 3]'],
-    serviceSlugs: ['hvac-amc'],
-    challenge: '[Documented issue with the existing system.]',
-    solution: '[Verified work completed.]',
-    execution: '[Explain the installation or coordination work, with actual site photographs.]',
-    outcome:
-      '[Measured or verifiable outcomes only — completed capacity, area served, commissioning status or documented operational improvements.]',
-    sortOrder: 3,
-  },
-];

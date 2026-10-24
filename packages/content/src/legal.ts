@@ -49,7 +49,7 @@ export const privacyPolicy: LegalPage = {
     {
       heading: 'Sharing with authorized service providers',
       paragraphs: [
-        'Where necessary, we share information with service providers who help us operate the website and our business, such as hosting, database and email providers. They may only use it to provide those services to us.',
+        'Where necessary, we share information with service providers who help us operate the website and our business, such as website hosting, form-handling and email providers. They may only use it to provide those services to us.',
         'We may also disclose information where required by law or to protect our legal rights.',
       ],
     },

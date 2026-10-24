@@ -74,10 +74,6 @@ export const projectsPage = {
     title: 'Case studies are being documented.',
     body: 'We publish case studies only once project details and site photographs are verified and approved for publication. To discuss a similar requirement, share your project details with our team.',
   },
-  unavailable: {
-    title: 'Projects could not be loaded right now.',
-    body: 'Please try again shortly, or contact our team directly to discuss your requirements.',
-  },
   detail: {
     challenge: 'The challenge',
     solution: 'The ALOFT solution',

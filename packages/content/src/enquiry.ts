@@ -1,6 +1,6 @@
 /**
- * Enquiry form definition shared by the frontend form and the backend DTO,
- * so both validate against the same options and limits.
+ * Enquiry form definition: the field options, labels and limits the form
+ * renders and validates against.
  */
 
 export interface Option<T extends string = string> {
@@ -71,7 +71,7 @@ export interface EnquiryPayload {
   message: string;
   /** Page the enquiry was sent from, e.g. "/services/hvac-amc". */
   sourcePath?: string;
-  /** Honeypot — must stay empty. */
+  /** Honeypot: must stay empty. */
   website?: string;
   /** Epoch ms when the form was first rendered (bot timing check). */
   startedAt?: number;

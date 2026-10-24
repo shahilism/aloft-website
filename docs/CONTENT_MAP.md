@@ -30,7 +30,7 @@ SEO title: *ALOFT \| Commercial HVAC & Centralized Cooling Solutions in Kerala* 
 | 5 | Our services | Service cards (image left) | `service-*.jpg` | VRF, ducting, chilled water, AMC; bullets are the first three "What we cover" items |
 | 6 | Our process | Sticky intro + step cards | Line-icon tiles | Icon tiles replace stock photos |
 | 7 | ALOFT difference | Four value cards | Line icons | |
-| 8 | Visual proof | Project cards with before/after slider | From API | Shows published projects only; honest empty state until real case studies exist |
+| 8 | Visual proof | Project cards with before/after slider | From `projects.ts` | Shows published projects only; honest empty state until real case studies exist |
 | 9 | Maintenance / AMC | Two pricing cards | — | Enquiry-led, no prices; heading and intro from the AMC service page (4E) |
 | 10 | Testimonials → **Who we work with** | Testimonial carousel | Sector icons | Draft instructs this replacement; sectors from the FAQ, audience lines from brand board 02 (not presented as quotes) |
 | 11 | FAQ | FAQ with help card | — | All five Q&As; FAQPage structured data |
@@ -67,11 +67,11 @@ One reusable layout (Tempra's CMS service page): H1 + summary + CTA, wide image,
 
 ## Page 5 — Projects `/projects`, `/projects/[slug]`
 
-Served by the NestJS API from PostgreSQL. The draft's three case-study structures are seeded as **unpublished drafts** with placeholders; they are never shown publicly. Detail layout follows Tempra: hero, before/after slider, fact bar (building type, location, system, capacity), The challenge / The ALOFT solution / Execution / Project outcome, scope sidebar, more projects, closing band ("Have a similar project? Talk to ALOFT.").
+Read from `packages/content/src/projects.ts`, which is empty until a verified, client-approved project is added (the file includes a complete example). Detail layout follows Tempra: hero, before/after slider, fact bar (building type, location, system, capacity), The challenge / The ALOFT solution / Execution / Project outcome, scope sidebar, more projects, closing band ("Have a similar project? Talk to ALOFT.").
 
 ## Page 6 — Contact `/contact`
 
-All ten form fields and seven service options from the draft; "Request a project consultation" submit; the confirmation message appears **only after the API confirms the enquiry was stored**.
+All ten form fields and seven service options from the draft; "Request a project consultation" submit; the confirmation message appears **only after the hosted form service accepts the enquiry**. Without a form service configured, the visitor's email app opens with the enquiry pre-filled instead.
 
 ## Pages 7–9 — Legal and 404
 

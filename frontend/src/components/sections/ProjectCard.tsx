@@ -1,22 +1,24 @@
 import Image from 'next/image';
-import type { ProjectSummary } from '@aloft/content';
+import { projectCover, projectImage, type Project } from '@aloft/content';
 import { BeforeAfter } from '@/components/ui/BeforeAfter';
 import { ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Reveal } from '@/components/ui/Reveal';
-import { DraftBadge } from './DraftBadge';
 
 const SIZES = '(min-width: 768px) 330px, 100vw';
 
 /** Reference project card: comparison slider (or photo) left, details right. */
-export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: ProjectSummary; headingLevel?: 'h2' | 'h3' }) {
+export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: Project; headingLevel?: 'h2' | 'h3' }) {
   const href = `/projects/${project.slug}`;
+  const before = projectImage(project, 'before');
+  const after = projectImage(project, 'after');
+  const cover = projectCover(project);
   const media =
-    project.beforeImage && project.afterImage ? (
-      <BeforeAfter before={project.beforeImage} after={project.afterImage} sizes={SIZES} className="h-full min-h-[260px]" />
-    ) : project.coverImage ? (
+    before && after ? (
+      <BeforeAfter before={before} after={after} sizes={SIZES} className="h-full min-h-[260px]" />
+    ) : cover ? (
       <div className="relative h-full min-h-[260px] overflow-hidden rounded-[var(--radius-media)]">
-        <Image src={project.coverImage.url} alt={project.coverImage.alt} fill sizes={SIZES} className="object-cover" />
+        <Image src={cover.url} alt={cover.alt} fill sizes={SIZES} className="object-cover" />
       </div>
     ) : (
       <div className="grid h-full min-h-[220px] place-items-center rounded-[var(--radius-media)] bg-ice text-supply">
@@ -30,7 +32,6 @@ export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: Proj
       <article className="card grid gap-5 p-3 md:grid-cols-[330px_1fr] md:gap-8">
         <div className="md:min-h-[300px]">{media}</div>
         <div className="flex flex-col px-2 pb-3 md:px-0 md:py-5 md:pr-6">
-          {project.isDraft && <DraftBadge className="mb-4 self-start" />}
           <H className="type-title">{project.title}</H>
           <p className="type-body mt-3 max-w-xl">{project.summary}</p>
           <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 text-[0.875rem] sm:grid-cols-3">

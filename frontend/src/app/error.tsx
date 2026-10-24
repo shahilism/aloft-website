@@ -3,7 +3,7 @@
 import { site } from '@aloft/content';
 import { Button, ButtonLink } from '@/components/ui/Button';
 
-/** Shown when a page cannot load its data (e.g. the API is unreachable). */
+/** Shown when a page fails to render. */
 export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <section className="container-page py-20 md:py-32">

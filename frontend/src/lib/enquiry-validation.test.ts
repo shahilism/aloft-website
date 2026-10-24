@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toPayload, validateEnquiry, type EnquiryFormValues } from './enquiry-validation';
+import { toMailto, toSubmission, validateEnquiry, type EnquiryFormValues } from './enquiry-validation';
 
 const valid: EnquiryFormValues = {
   fullName: 'Anil Kumar',
@@ -36,17 +36,31 @@ describe('validateEnquiry', () => {
     );
   });
 
-  it('rejects options that the API does not accept', () => {
+  it('rejects options the form does not offer', () => {
     expect(validateEnquiry({ ...valid, service: 'furnace-repair' }).service).toBeDefined();
   });
 });
 
-describe('toPayload', () => {
-  it('trims values and omits blank optional fields', () => {
-    const payload = toPayload({ ...valid, fullName: '  Anil Kumar ', companyName: '  ' }, { sourcePath: '/contact' });
-    expect(payload.fullName).toBe('Anil Kumar');
-    expect(payload.companyName).toBeUndefined();
-    expect(payload.approxArea).toBeUndefined();
-    expect(payload.sourcePath).toBe('/contact');
+describe('toSubmission', () => {
+  it('labels every answer and omits blank optional fields', () => {
+    const sub = toSubmission({ ...valid, fullName: '  Anil Kumar ', companyName: '  ' }, '/contact');
+    expect(sub._subject).toBe('Website enquiry: VRF / VRV installation — Anil Kumar');
+    expect(sub['Full name']).toBe('Anil Kumar');
+    expect(sub.email).toBe('facilities@example.com');
+    expect(sub['Building type']).toBe('Commercial office');
+    expect(sub['Sent from page']).toBe('/contact');
+    expect(sub).not.toHaveProperty('Company name');
+    expect(sub).not.toHaveProperty('Approximate built-up area');
+  });
+});
+
+describe('toMailto', () => {
+  it('builds an encoded email with subject and readable body', () => {
+    const href = toMailto('aloftac@gmail.com', toSubmission(valid, '/contact'));
+    expect(href.startsWith('mailto:aloftac@gmail.com?subject=')).toBe(true);
+    const body = decodeURIComponent(href.split('&body=')[1]);
+    expect(body).toContain('Business email: facilities@example.com');
+    expect(body).toContain('Message / project requirements:\nThree floors');
+    expect(body).not.toContain('_subject');
   });
 });

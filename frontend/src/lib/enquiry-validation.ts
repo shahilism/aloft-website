@@ -1,8 +1,13 @@
 import {
+  buildingTypeOptions,
   buildingTypeValues,
+  enquiryFieldLabels,
+  enquiryServiceOptions,
   enquiryLimits as L,
   enquiryServiceValues,
   phonePattern,
+  labelFor,
+  projectStageOptions,
   projectStageValues,
   type EnquiryPayload,
 } from '@aloft/content';
@@ -25,8 +30,7 @@ export type FieldErrors = Partial<Record<keyof EnquiryFormValues, string>>;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
- * Client-side checks mirroring the API's DTO, for immediate feedback.
- * The API remains the authority and re-validates everything.
+ * Validates the enquiry before it is sent, using the limits and options in @aloft/content.
  */
 export function validateEnquiry(v: EnquiryFormValues): FieldErrors {
   const e: FieldErrors = {};
@@ -47,19 +51,36 @@ export function validateEnquiry(v: EnquiryFormValues): FieldErrors {
   return e;
 }
 
-export function toPayload(v: EnquiryFormValues, extra: Pick<EnquiryPayload, 'sourcePath' | 'website' | 'startedAt'>) {
-  const optional = (s: string) => (s.trim() === '' ? undefined : s.trim());
-  return {
-    fullName: v.fullName.trim(),
-    companyName: optional(v.companyName),
-    email: v.email.trim(),
-    phone: v.phone.trim(),
-    projectLocation: v.projectLocation.trim(),
-    service: v.service,
-    buildingType: v.buildingType,
-    approxArea: optional(v.approxArea),
-    projectStage: v.projectStage,
-    message: v.message.trim(),
-    ...extra,
+/**
+ * The enquiry as labelled fields, ready for a hosted form service: the
+ * notification ALOFT receives lists each answer under its form label.
+ * `email` and `_subject` follow the common reply-to/subject conventions.
+ */
+export function toSubmission(v: EnquiryFormValues, sourcePath: string): Record<string, string> {
+  const t = (s: string) => s.trim();
+  const out: Record<string, string> = {
+    _subject: `Website enquiry: ${labelFor(enquiryServiceOptions, v.service)} — ${t(v.fullName)}`,
+    [enquiryFieldLabels.fullName]: t(v.fullName),
+    'Company name': t(v.companyName),
+    email: t(v.email),
+    [enquiryFieldLabels.phone]: t(v.phone),
+    [enquiryFieldLabels.projectLocation]: t(v.projectLocation),
+    [enquiryFieldLabels.service]: labelFor(enquiryServiceOptions, v.service),
+    [enquiryFieldLabels.buildingType]: labelFor(buildingTypeOptions, v.buildingType),
+    [enquiryFieldLabels.approxArea]: t(v.approxArea),
+    [enquiryFieldLabels.projectStage]: labelFor(projectStageOptions, v.projectStage),
+    [enquiryFieldLabels.message]: t(v.message),
+    'Sent from page': sourcePath,
   };
+  return Object.fromEntries(Object.entries(out).filter(([, value]) => value !== ''));
+}
+
+/** Fallback when no form service is configured: a pre-filled email to ALOFT. */
+export function toMailto(to: string, submission: Record<string, string>): string {
+  const { _subject, ...fields } = submission;
+  const lines = Object.entries(fields).map(([key, value]) => {
+    if (key === enquiryFieldLabels.message) return `\n${key}:\n${value}\n`;
+    return `${key === 'email' ? enquiryFieldLabels.email : key}: ${value}`;
+  });
+  return `mailto:${to}?subject=${encodeURIComponent(_subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
 }

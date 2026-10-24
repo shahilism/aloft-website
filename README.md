@@ -1,93 +1,62 @@
 # ALOFT Centralized Cooling Solutions — website
 
-Production website for ALOFT, built on the layout of the [Tempra](https://tempra.framer.website) template with ALOFT's approved content and brand guideline.
+Website for ALOFT, built on the layout of the [Tempra](https://tempra.framer.website) template with ALOFT's approved content and brand guideline. It is a static Next.js site with no backend or database of its own.
 
 | Part | Stack | Folder |
 |---|---|---|
 | Website | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS 4, Framer Motion | [`frontend/`](frontend) |
-| API | NestJS 11, TypeScript, class-validator, Swagger, Pino | [`backend/`](backend) |
-| Database | PostgreSQL + Prisma 6 (schema, migrations, seed) | [`database/`](database) |
-| Shared content | Approved copy, service data, enquiry options, API types | [`packages/content/`](packages/content) |
+| Content | Approved copy, services, projects, enquiry options | [`packages/content/`](packages/content) |
 
-Docs: [content map](docs/CONTENT_MAP.md) · [API](docs/API.md) · [OpenAPI](docs/openapi.json) · [image credits](docs/image-credits.json)
+Docs: [content map](docs/CONTENT_MAP.md) · [image credits](docs/image-credits.json)
 
-## How it fits together
+## How it works
 
-- **Pages are static or ISR.** Home, about, services and legal pages are prerendered from `@aloft/content`, so they never depend on the API being up.
-- **Projects come from the API.** `/projects` and the home showcase fetch `GET /api/v1/projects` and revalidate every 5 minutes. If the API is unreachable they show an "unavailable" state instead of breaking.
-- **Enquiries go to the API.** The browser posts to `POST /api/v1/contact`; the API validates, stores in PostgreSQL and optionally emails ALOFT. The site shows the confirmation only after a successful store.
-- Copy is edited in one place (`packages/content/src`) and used by both apps.
-
-## Requirements
-
-- Node.js 20.11+ (22 recommended, see `.nvmrc`) and npm 10+
-- PostgreSQL 14+ (or Docker: `docker compose up -d db`)
-- Network access during `next build` (it downloads the Jost and JetBrains Mono fonts once, then self-hosts them)
+- **Every page is prerendered** from `packages/content` at build time. Changing copy, services or projects means editing that package and redeploying.
+- **Enquiries** are validated in the browser, then sent one of two ways:
+  - **With `NEXT_PUBLIC_FORM_ENDPOINT` set** (recommended): posted as JSON to a hosted form service such as [Formspree](https://formspree.io), which emails ALOFT each enquiry with every answer labelled. The confirmation message shows only after the service accepts it.
+  - **Without it:** the visitor's email app opens with the enquiry pre-filled and addressed to ALOFT, and the page tells them to press send. No confirmation is claimed, because the site can't know whether it was sent.
+- Basic spam protection runs in the browser (hidden honeypot field and a minimum fill time). Hosted form services add their own filtering.
 
 ## Local development
 
+Requires Node.js 20.11+ (22 recommended, see `.nvmrc`). `next build` needs network access once to download the Jost and JetBrains Mono fonts, which are then self-hosted.
+
 ```bash
-npm install                                  # installs all workspaces and builds @aloft/content
-
-cp backend/.env.example backend/.env         # set DATABASE_URL
+npm install                                  # installs workspaces and builds packages/content
 cp frontend/.env.example frontend/.env.local
-
-docker compose up -d db                      # or point DATABASE_URL at your own PostgreSQL
-npm run db:deploy                            # apply migrations
-npm run db:seed                              # optional: unpublished case-study templates
-
-npm run dev:backend                          # http://localhost:4000  (docs at /api/docs)
-npm run dev:frontend                         # http://localhost:3000
+npm run dev                                  # http://localhost:3000
 ```
 
-To preview the project-card layouts with the seeded templates, set `PROJECTS_INCLUDE_DRAFTS=true` in `backend/.env`. Drafts are marked "Draft template — not published" and `noindex`. **Never enable this in production.**
+After editing `packages/content`, run `npm run build:content` (the site reads its compiled output).
 
-After editing `packages/content`, run `npm run build:content` (the apps read its compiled output).
-
-## Tests and checks
+## Checks
 
 ```bash
-npm test             # content rules + backend unit + backend e2e
-npm run test -w frontend
+npm test          # content rules (7) + form validation and submission helpers (5)
 npm run lint
 npm run typecheck
 npm run build
 ```
 
-| Suite | Covers |
-|---|---|
-| `packages/content` (7) | Slugs match the draft URLs, every service is complete, unique meta descriptions within length, brand writing rules (no `!`, no 24/7, no `$` prices), phone format |
-| backend unit (24) | Enquiry storage, honeypot and timing spam guard, IP hashing, email failure tolerance, 503 on DB failure, DTO validation and header-injection safety, project visibility and mapping |
-| backend e2e (13) | Every endpoint over HTTP: health ok/degraded, services, published-only projects, contact 201/400/413/429/503, security headers and CORS |
-| frontend (4) | Client-side enquiry validation and payload shaping |
+The content tests enforce the brand writing rules (no `!`, no 24/7 claims, no `$` prices), unique metadata, complete service pages, and that any published project has no `[placeholders]` and has alt text on every image.
 
 ## Managing content
 
-- **Copy, services, FAQs, contact details:** `packages/content/src/*.ts`, then rebuild.
-- **Enquiries:** stored in the `enquiries` table. Browse with `npm run prisma:studio -w backend`, and/or set the SMTP variables so each enquiry is emailed to `ENQUIRY_NOTIFY_TO`.
-- **Publishing a case study:** in the `projects` table, replace every bracketed placeholder with verified, client-approved details, add rows to `project_images` (kinds `COVER`, `BEFORE`, `AFTER`, `GALLERY`, with alt text), then set `published = true`. It appears within 5 minutes. Images on another host need that host in `PROJECT_IMAGE_HOSTS`.
+- **Copy, services, FAQs, contact details:** `packages/content/src/*.ts`.
+- **Publishing a case study:** add an entry to `projects` in `packages/content/src/projects.ts` (the file shows a complete example) and put its photos in `frontend/public/images/projects/`. Publish only verified, client-approved projects. Its page, sitemap entry and home-page card appear automatically.
 
-## Deployment
+## Deployment (Vercel)
 
-Any Node host works; Docker images are provided.
+The repo is set up for Vercel: the root `vercel-build` script builds the content package and the site.
 
-```bash
-docker compose up -d --build     # db + api (port 4000) + web (port 3000)
-```
-
-Production checklist:
-
-1. **Database:** managed PostgreSQL; set `DATABASE_URL`. The API container runs `prisma migrate deploy` on start.
-2. **API** (`backend/Dockerfile`): set `NODE_ENV=production`, a long random `IP_HASH_SALT`, `CORS_ORIGINS=https://aloftac.com`, `TRUST_PROXY=1` behind a load balancer, SMTP variables, and decide whether to keep `SWAGGER_ENABLED`. Health check: `GET /api/v1/health`.
-3. **Website** (`frontend/Dockerfile`, standalone output): `NEXT_PUBLIC_*` values are baked in at build time, so pass them as build args. Set `API_INTERNAL_URL` if the server can reach the API on a private address.
-4. **Domain and SEO:** serve over HTTPS, submit `https://<domain>/sitemap.xml` in Google Search Console (`NEXT_PUBLIC_GSC_VERIFICATION`), add `NEXT_PUBLIC_GA_ID` for analytics (enquiries fire a `generate_lead` event). Use `NEXT_PUBLIC_NOINDEX=true` on staging.
-5. **Redirects:** if an older site existed at the domain, add 301 redirects from its URLs.
+1. Project root: repository root; framework: Next.js; output: `frontend/.next`.
+2. Environment variables: `NEXT_PUBLIC_SITE_URL` (e.g. `https://aloftac.com`), `NEXT_PUBLIC_FORM_ENDPOINT`, and optionally `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`. Set `NEXT_PUBLIC_NOINDEX=true` on preview deployments. These are baked in at build time, so redeploy after changing them.
+3. After the domain is live, submit `https://<domain>/sitemap.xml` in Google Search Console. With analytics on, enquiries fire a `generate_lead` event.
 
 ## Before launch — needs ALOFT's input
 
-- **Confirm contact details.** Phone `+91 95449 27508`, email `aloftac@gmail.com` and Perinthalmanna, Malappuram are taken from ALOFT's own proposals. A business-domain email is recommended. Working hours are hidden until supplied (`site.ts`).
-- **Real case studies and photographs.** The projects section shows an honest empty state until at least one verified, client-approved project is published.
-- **Legal review** of the privacy policy and terms (`legal.ts`), as the content draft requires.
-- **Team section** (About) can be added once real names, roles and photos are supplied.
-- **Client logos or testimonials** only with written permission.
-- **Logo files:** the site uses the supplied PNG masters (`logo-colour` and `logo-reversed` equivalents). An SVG master would render sharper on very large screens.
+- **Set up the enquiry form service** (create a Formspree form sending to ALOFT's inbox and set `NEXT_PUBLIC_FORM_ENDPOINT`). Until then enquiries rely on the visitor sending the pre-filled email.
+- **Confirm contact details.** Phone `+91 95449 27508`, email `aloftac@gmail.com` and Perinthalmanna, Malappuram come from ALOFT's own proposals. Working hours are hidden until supplied (`site.ts`).
+- **Real case studies and photographs.** The projects section shows an honest empty state until one is published.
+- **Legal review** of the privacy policy and terms (`legal.ts`). If a form service is used, the privacy policy should name it as a provider that processes enquiry data.
+- **Team section** (About) once real names, roles and photos are supplied; client logos or testimonials only with written permission.
