@@ -44,10 +44,10 @@ export const home = {
     primary: { label: 'Get a project quote', href: '/contact' },
     secondary: { label: 'Explore services', href: '#services' },
     image: {
-      src: '/images/hero-ahu-plant-room.jpg',
-      alt: 'Air handling unit in a clean commercial plant room',
-      width: 2000,
-      height: 1500,
+      src: '/images/hero-commercial-interior.jpg',
+      alt: 'Modern commercial space with exposed architectural HVAC ductwork and centralized climate control',
+      width: 1024,
+      height: 576,
     },
   },
 

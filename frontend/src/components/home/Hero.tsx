@@ -42,7 +42,7 @@ export function Hero() {
             fill
             priority
             sizes="(min-width: 1200px) 1120px, calc(100vw - 40px)"
-            className="object-cover object-[50%_60%]"
+            className="object-cover object-[50%_45%]"
           />
         </div>
       </div>
