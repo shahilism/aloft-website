@@ -17,16 +17,23 @@ export function ServiceCard({ service, index, summary, linkLabel = 'View service
   const href = `/services/${service.slug}`;
   return (
     <Reveal>
-      <article className="card group grid gap-5 p-3 sm:grid-cols-[minmax(0,240px)_1fr] sm:gap-8 md:grid-cols-[minmax(0,380px)_1fr]">
-        <Link href={href} tabIndex={-1} aria-hidden="true" className="relative block aspect-[4/3] overflow-hidden rounded-[var(--radius-media)] sm:aspect-auto sm:min-h-[260px] md:min-h-[300px]">
-          <Image
-            src={service.image.src}
-            alt=""
-            fill
-            sizes="(min-width: 768px) 380px, (min-width: 640px) 240px, 100vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-          />
-        </Link>
+      <article className="card group grid gap-5 p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:gap-8 md:grid-cols-[minmax(0,380px)_1fr] lg:grid-cols-[minmax(0,420px)_1fr]">
+        <div className="flex items-center">
+          <Link
+            href={href}
+            tabIndex={-1}
+            aria-hidden="true"
+            className="relative block aspect-video w-full overflow-hidden rounded-[var(--radius-media)]"
+          >
+            <Image
+              src={service.image.src}
+              alt={service.image.alt || service.name}
+              fill
+              sizes="(min-width: 1024px) 420px, (min-width: 768px) 380px, (min-width: 640px) 300px, 100vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+          </Link>
+        </div>
         <div className="flex flex-col px-2 pb-3 sm:px-0 sm:py-5 sm:pr-6">
           <p className="type-label text-supply">{String(index).padStart(2, '0')}</p>
           <H className="type-title mt-3">

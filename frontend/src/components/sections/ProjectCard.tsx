@@ -15,13 +15,13 @@ export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: Proj
   const cover = projectCover(project);
   const media =
     before && after ? (
-      <BeforeAfter before={before} after={after} sizes={SIZES} className="h-full min-h-[260px]" />
+      <BeforeAfter before={before} after={after} sizes={SIZES} className="aspect-video w-full" />
     ) : cover ? (
-      <div className="relative h-full min-h-[260px] overflow-hidden rounded-[var(--radius-media)]">
+      <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-media)]">
         <Image src={cover.url} alt={cover.alt} fill sizes={SIZES} className="object-cover" />
       </div>
     ) : (
-      <div className="grid h-full min-h-[220px] place-items-center rounded-[var(--radius-media)] bg-ice text-supply">
+      <div className="grid aspect-video w-full place-items-center rounded-[var(--radius-media)] bg-ice text-supply">
         <Icon name="building" size={48} strokeWidth={1.25} />
         <span className="sr-only">Site photographs to be added</span>
       </div>

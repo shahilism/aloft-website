@@ -33,7 +33,7 @@ export default function AboutPage() {
           <SectionHeader id="journey-title" eyebrow={journey.eyebrow} title={journey.title} body={journey.lead} />
           <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12 md:items-start">
             <Reveal className="md:col-span-6">
-              <div className="relative aspect-[3/2] overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-card)]">
+              <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-card)]">
                 <Image
                   src={journey.image.src}
                   alt={journey.image.alt}

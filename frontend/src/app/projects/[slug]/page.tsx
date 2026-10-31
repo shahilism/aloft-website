@@ -61,10 +61,10 @@ export default async function ProjectPage({ params }: { params: Params }) {
               after={after}
               priority
               sizes="(min-width: 1200px) 1120px, calc(100vw - 40px)"
-              className="aspect-[4/3] md:aspect-[16/9]"
+              className="aspect-video w-full"
             />
           ) : cover ? (
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] md:aspect-[16/9]">
+            <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)]">
               <Image src={cover.url} alt={cover.alt} fill priority sizes="(min-width: 1200px) 1120px, 100vw" className="object-cover" />
             </div>
           ) : null}
@@ -102,7 +102,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
             {gallery.length > 0 && (
               <div className="grid gap-4 sm:grid-cols-2">
                 {gallery.map((img) => (
-                  <div key={img.url} className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-media)]">
+                  <div key={img.url} className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-media)]">
                     <Image src={img.url} alt={img.alt} fill sizes="(min-width: 768px) 360px, 100vw" className="object-cover" />
                   </div>
                 ))}

@@ -89,10 +89,10 @@ export const services: Service[] = [
     ],
     cta: 'Request a VRF / VRV project quote',
     image: {
-      src: '/images/service-vrf-rooftop.jpg',
-      alt: 'Outdoor air-conditioning equipment installed on a commercial roof',
-      width: 1471,
-      height: 974,
+      src: '/images/VRF : VRV systems.png',
+      alt: 'Commercial VRF / VRV multi-zone air conditioning system installation',
+      width: 1672,
+      height: 941,
     },
   },
   {
@@ -120,10 +120,10 @@ export const services: Service[] = [
     ],
     cta: 'Discuss your ducting project',
     image: {
-      src: '/images/service-ducting.jpg',
-      alt: 'Installers in safety helmets and high-visibility vests fitting a section of sheet-metal ductwork',
-      width: 2000,
-      height: 1330,
+      src: '/images/Ductable AC & ducting.png',
+      alt: 'Commercial ductable air conditioning and engineered air distribution ductwork',
+      width: 1820,
+      height: 864,
     },
   },
   {
@@ -152,10 +152,10 @@ export const services: Service[] = [
     ],
     cta: 'Discuss your chilled-water project',
     image: {
-      src: '/images/service-chilled-water.jpg',
-      alt: 'Air-cooled chiller installed on a rooftop',
-      width: 2000,
-      height: 1125,
+      src: '/images/Chilled-water systems.png',
+      alt: 'Centralized chilled-water HVAC system for commercial cooling',
+      width: 1983,
+      height: 793,
     },
   },
   {
@@ -183,10 +183,10 @@ export const services: Service[] = [
     ],
     cta: 'Request an AMC proposal',
     image: {
-      src: '/images/service-maintenance.jpg',
-      alt: 'Technician wearing safety glasses and gloves cleaning a refrigeration compressor assembly',
-      width: 2000,
-      height: 1333,
+      src: '/images/HVAC maintenance & AMC.png',
+      alt: 'Commercial HVAC planned maintenance and annual maintenance contract servicing',
+      width: 1821,
+      height: 864,
     },
   },
 ];

@@ -10,35 +10,38 @@ import { Reveal } from '@/components/ui/Reveal';
 export function ProcessSection() {
   return (
     <section aria-labelledby="process-title" className="section">
-      <div className="container-page grid gap-10 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <Reveal className="md:sticky md:top-28">
-            <Eyebrow className="mb-4">{home.process.eyebrow}</Eyebrow>
-            <h2 id="process-title" className="type-headline">
-              {home.process.title}
-            </h2>
-            <p className="type-body mt-5 max-w-sm">{home.process.body}</p>
-          </Reveal>
-        </div>
-        <ol className="space-y-5 md:col-span-7">
-          {processSteps.map((step, i) => (
-            <li key={step.title}>
-              <Reveal delay={i * 0.05}>
-                <div className="card flex flex-col gap-5 p-3 sm:flex-row sm:items-center sm:gap-6">
-                  <div className="grid aspect-[4/3] w-full shrink-0 place-items-center rounded-[var(--radius-media)] bg-ice text-petrol sm:w-44">
-                    <Icon name={step.icon} size={44} strokeWidth={1.4} />
-                  </div>
-                  <div className="px-2 pb-3 sm:px-0 sm:py-2 sm:pr-4">
-                    <h3 className="type-title">
-                      <span className="text-supply">{String(i + 1).padStart(2, '0')}</span> — {step.title}
-                    </h3>
-                    <p className="type-body mt-2">{step.body}</p>
-                  </div>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ol>
+      <div className="container-page">
+        <Reveal>
+          <Eyebrow className="mb-5">{home.process.eyebrow}</Eyebrow>
+          <div className="grid gap-10 md:grid-cols-12 md:items-start md:gap-12">
+            <div className="md:col-span-5 md:sticky md:top-28">
+              <h2 id="process-title" className="type-headline">
+                {home.process.title}
+              </h2>
+              <p className="type-body mt-5 max-w-sm">{home.process.body}</p>
+            </div>
+            <ol className="space-y-5 md:col-span-7">
+              {processSteps.map((step, i) => (
+                <li key={step.title}>
+                  <Reveal delay={i * 0.05}>
+                    <div className="card flex flex-col gap-5 p-4 sm:flex-row sm:items-center sm:gap-6 sm:p-5 md:p-6">
+                      <div className="grid aspect-video w-full shrink-0 place-items-center rounded-[var(--radius-media)] border border-ice bg-ice/70 text-supply sm:w-44">
+                        <Icon name={step.icon} size={40} strokeWidth={1.5} />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-center px-1">
+                        <p className="type-label text-supply">{String(i + 1).padStart(2, '0')}</p>
+                        <h3 className="mt-1.5 text-[1.25rem] font-semibold leading-snug tracking-[-0.015em] text-petrol md:text-[1.375rem]">
+                          {step.title}
+                        </h3>
+                        <p className="type-body mt-2">{step.body}</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

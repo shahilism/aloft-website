@@ -46,7 +46,7 @@ export default async function ServicePage({ params }: { params: Params }) {
 
       <div className="container-wide">
         <div className="animate-rise [animation-delay:120ms]">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] sm:aspect-[16/9] lg:aspect-[2.2/1]">
+          <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-card)]">
             <Image
               src={service.image.src}
               alt={service.image.alt}
