@@ -44,10 +44,10 @@ export const home = {
     primary: { label: 'Get a project quote', href: '/contact' },
     secondary: { label: 'Explore services', href: '#services' },
     image: {
-      src: '/images/hero-commercial-interior.jpg',
-      alt: 'Modern commercial space with exposed architectural HVAC ductwork and centralized climate control',
-      width: 1024,
-      height: 576,
+      src: '/images/Biophilic Industrial Café Lounge.png',
+      alt: 'Modern biophilic industrial café lounge with exposed architectural HVAC ductwork and centralized climate control',
+      width: 1983,
+      height: 793,
     },
   },
 

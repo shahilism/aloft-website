@@ -10,25 +10,27 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="pt-10 pb-16 md:pt-16 md:pb-20">
       <div className="container-page">
-        <div className="grid animate-rise gap-8 md:grid-cols-12 md:items-end md:gap-10">
-          <div className="md:col-span-7">
-            <Eyebrow className="mb-5">{hero.eyebrow}</Eyebrow>
-            <h1 id="hero-title" className="type-display">
-              {hero.titleLead}
-              <span className="text-supply">{hero.titleAccent}</span>
-              {hero.titleEnd}
-            </h1>
-          </div>
-          <div className="md:col-span-5 md:pb-1 md:text-right">
-            <p className="text-[1.0625rem] leading-snug font-medium md:ml-auto md:max-w-[24rem]">{hero.subtitle}</p>
-            <p className="type-body mt-3 md:ml-auto md:max-w-[24rem]">{hero.body}</p>
-            <div className="mt-7 flex flex-wrap gap-3 md:justify-end">
-              <ButtonLink href={hero.primary.href} variant="primary">
-                {hero.primary.label}
-              </ButtonLink>
-              <ButtonLink href={hero.secondary.href} variant="outline" icon="arrow-right">
-                {hero.secondary.label}
-              </ButtonLink>
+        <div className="animate-rise">
+          <Eyebrow className="mb-5">{hero.eyebrow}</Eyebrow>
+          <div className="grid gap-8 md:grid-cols-12 md:items-start md:gap-10">
+            <div className="md:col-span-7">
+              <h1 id="hero-title" className="type-display">
+                {hero.titleLead}
+                <span className="text-supply">{hero.titleAccent}</span>
+                {hero.titleEnd}
+              </h1>
+            </div>
+            <div className="md:col-span-5 md:pt-2">
+              <p className="text-[1.0625rem] leading-snug font-medium md:max-w-[26rem]">{hero.subtitle}</p>
+              <p className="type-body mt-3 md:max-w-[26rem]">{hero.body}</p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <ButtonLink href={hero.primary.href} variant="primary">
+                  {hero.primary.label}
+                </ButtonLink>
+                <ButtonLink href={hero.secondary.href} variant="outline" icon="arrow-right">
+                  {hero.secondary.label}
+                </ButtonLink>
+              </div>
             </div>
           </div>
         </div>
