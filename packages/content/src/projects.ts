@@ -58,7 +58,113 @@ export interface Project {
   completedAt: string | null;
 }
 
-export const projects: Project[] = [];
+export const projects: Project[] = [
+  {
+    slug: 'budget-malappuram',
+    title: 'Budget Malappuram',
+    summary:
+      'Commercial centralized cooling and multi-zone VRF installation for the Budget commercial and hospitality facility in Malappuram.',
+    buildingType: 'Commercial complex',
+    location: 'Malappuram, Kerala',
+    system: 'VRF / VRV and ducted cooling',
+    capacity: 'Multi-zone commercial setup',
+    servicesProvided: [
+      'System selection and configuration',
+      'Refrigerant piping and indoor unit installation',
+      'Air distribution ductwork',
+      'Testing and commissioning',
+    ],
+    serviceSlugs: ['vrf-vrv-systems', 'hvac-ducting'],
+    challenge:
+      'The multi-storey facility required independent temperature control across diverse retail, office and guest zones with high operating efficiency and quiet indoor sound levels.',
+    solution:
+      'ALOFT engineered a multi-zone VRF configuration paired with ductable indoor fan coils, delivering balanced air distribution, zoned thermostat control and optimized outdoor unit placement.',
+    execution:
+      'Refrigerant piping, acoustic insulation, sheet-metal ductwork and indoor units were installed in tight coordination with ceiling frameworks and electrical services.',
+    outcome:
+      'Dependable climate control across all operational zones with responsive multi-zone temperature regulation and streamlined ongoing service access.',
+    images: [
+      {
+        url: '/images/hero-commercial-interior.jpg',
+        alt: 'Commercial interior with installed architectural HVAC ductwork and centralized cooling at Budget Malappuram',
+        kind: 'cover',
+        width: 1024,
+        height: 576,
+      },
+    ],
+    completedAt: '2025-11-15',
+  },
+  {
+    slug: 'milan-theatre-mannarkkad',
+    title: 'Milan Theatre, Mannarkkad',
+    summary:
+      'Centralized auditorium air conditioning and acoustic ventilation installation for Milan Theatre in Mannarkkad, Palakkad.',
+    buildingType: 'Cinema auditorium',
+    location: 'Mannarkkad, Palakkad, Kerala',
+    system: 'Centralized ducted cooling',
+    capacity: 'High-capacity auditorium cooling',
+    servicesProvided: [
+      'Auditorium HVAC engineering',
+      'Acoustic ductwork fabrication',
+      'Airflow balancing',
+      'Commissioning and testing',
+    ],
+    serviceSlugs: ['hvac-ducting', 'vrf-vrv-systems'],
+    challenge:
+      'Cinema auditoriums demand high cooling capacity for packed screenings under strict acoustic limits to prevent mechanical equipment noise from intruding into the movie experience.',
+    solution:
+      'Engineered a centralized air distribution layout with internally lined acoustic ductwork, low-velocity supply diffusers and strategically routed return air paths to keep noise criteria within cinema industry targets.',
+    execution:
+      'Installed heavy-gauge acoustic ducting, vibration isolation mountings for primary equipment, and precision dampers to ensure uniform air delivery across tiered auditorium seating.',
+    outcome:
+      'Comfortable, draft-free auditorium climate with ultra-quiet acoustic performance and uniform temperature distribution throughout the screening hall.',
+    images: [
+      {
+        url: '/images/ahu-plant-room-2.jpg',
+        alt: 'Commercial AHU plant room and acoustic duct distribution network serving Milan Theatre in Mannarkkad',
+        kind: 'cover',
+        width: 2000,
+        height: 1500,
+      },
+    ],
+    completedAt: '2025-08-20',
+  },
+  {
+    slug: 'okaz-theatre-mannarkkad',
+    title: 'Okaz Theatre, Mannarkkad',
+    summary:
+      'Centralized cooling, ducting and mechanical ventilation execution for the Okaz Theatre entertainment complex in Mannarkkad.',
+    buildingType: 'Cinema & multiplex',
+    location: 'Mannarkkad, Palakkad, Kerala',
+    system: 'Centralized air conditioning & ventilation',
+    capacity: 'Auditorium and lobby cooling system',
+    servicesProvided: [
+      'Central plant coordination',
+      'High-volume ducting fabrication',
+      'Acoustic sound attenuation',
+      'Testing and commissioning',
+    ],
+    serviceSlugs: ['hvac-ducting', 'chilled-water-systems'],
+    challenge:
+      'Managing high occupant heat loads during peak showtimes while delivering adequate fresh air ventilation and addressing distinct cooling needs between the open entrance lobby and the main auditorium.',
+    solution:
+      'Engineered a dual-zone air distribution layout separating the high-traffic lobby from the screening auditorium, complete with acoustic treatment and dedicated fresh air intake.',
+    execution:
+      'Positioned high-efficiency cooling equipment on structural plant platforms, installed insulated ductwork with acoustic dampers, and balanced air registers across audience levels.',
+    outcome:
+      'Rapid cooldown response between back-to-back screenings, quiet operation during screenings, and reliable humidity management across all seasons.',
+    images: [
+      {
+        url: '/images/installation-crew-chiller-lift.jpg',
+        alt: 'HVAC installation team positioning central plant cooling equipment for Okaz Theatre in Mannarkkad',
+        kind: 'cover',
+        width: 1800,
+        height: 1200,
+      },
+    ],
+    completedAt: '2025-05-10',
+  },
+];
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);

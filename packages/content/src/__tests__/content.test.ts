@@ -73,7 +73,21 @@ test('published projects are complete and contain no placeholders', () => {
   assert.equal(new Set(slugs).size, slugs.length);
   for (const p of projects) {
     assert.match(p.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-    assert.ok(!JSON.stringify(p).includes('['), `${p.slug} still has a [placeholder]`);
+    const textValues = [
+      p.title,
+      p.summary,
+      p.buildingType,
+      p.location,
+      p.system,
+      p.challenge,
+      p.solution,
+      p.execution,
+      p.outcome,
+      ...p.servicesProvided,
+    ];
+    for (const val of textValues) {
+      assert.ok(!val.includes('['), `${p.slug} still has a [placeholder]: ${val}`);
+    }
     for (const img of p.images) assert.ok(img.alt.trim().length > 0, `${p.slug} image needs alt text`);
   }
 });

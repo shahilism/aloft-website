@@ -20,32 +20,34 @@ interface SectionHeaderProps {
  */
 export function SectionHeader({ eyebrow, title, body, button, as: Heading = 'h2', id }: SectionHeaderProps) {
   return (
-    <Reveal className="grid gap-6 md:grid-cols-12 md:items-end md:gap-10">
-      <div className="md:col-span-7">
-        {eyebrow && <Eyebrow className="mb-4">{eyebrow}</Eyebrow>}
-        <Heading id={id} className={Heading === 'h1' ? 'type-display' : 'type-headline'}>
-          {title}
-        </Heading>
-        {button && (
-          <div className="mt-7 hidden md:block">
-            <ButtonLink href={button.href} variant={button.variant ?? 'secondary'}>
-              {button.label}
-            </ButtonLink>
-          </div>
-        )}
-      </div>
-      {(body || button) && (
-        <div className="md:col-span-5 md:pb-2 md:text-right">
-          {body && <div className="type-body md:ml-auto md:max-w-[22rem]">{body}</div>}
+    <Reveal>
+      {eyebrow && <Eyebrow className="mb-5">{eyebrow}</Eyebrow>}
+      <div className="grid gap-6 md:grid-cols-12 md:items-start md:gap-10">
+        <div className="md:col-span-7">
+          <Heading id={id} className={Heading === 'h1' ? 'type-display' : 'type-headline'}>
+            {title}
+          </Heading>
           {button && (
-            <div className="mt-6 md:hidden">
+            <div className="mt-7 hidden md:block">
               <ButtonLink href={button.href} variant={button.variant ?? 'secondary'}>
                 {button.label}
               </ButtonLink>
             </div>
           )}
         </div>
-      )}
+        {(body || button) && (
+          <div className="md:col-span-5 md:pt-1.5">
+            {body && <div className="type-body md:max-w-[26rem]">{body}</div>}
+            {button && (
+              <div className="mt-6 md:hidden">
+                <ButtonLink href={button.href} variant={button.variant ?? 'secondary'}>
+                  {button.label}
+                </ButtonLink>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </Reveal>
   );
 }
