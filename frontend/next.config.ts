@@ -37,8 +37,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/projects/milan-cinemas-mannarkkad',
-        destination: '/projects/milan-theatre-mannarkkad',
+        source: '/projects/milan-theatre-mannarkkad',
+        destination: '/projects/milan-cinemas-mannarkkad',
+        permanent: true,
+      },
+      {
+        source: '/projects/okaz-theatre-mannarkkad',
+        destination: '/projects/okaz-cinemas-kaithachira',
         permanent: true,
       },
     ];

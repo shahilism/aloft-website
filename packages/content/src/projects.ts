@@ -102,10 +102,10 @@ export const projects: Project[] = [
     completedAt: '2025-11-15',
   },
   {
-    slug: 'milan-theatre-mannarkkad',
-    title: 'Milan Theatre, Mannarkkad',
+    slug: 'milan-cinemas-mannarkkad',
+    title: 'Milan Cinemas, Mannarkkad',
     summary:
-      'Centralized auditorium air conditioning and acoustic ventilation installation for Milan Theatre in Mannarkkad, Palakkad.',
+      'Centralized auditorium air conditioning and acoustic ventilation installation for Milan Cinemas in Mannarkkad, Palakkad.',
     buildingType: 'Cinema auditorium',
     location: 'Mannarkkad, Palakkad, Kerala',
     system: 'Centralized ducted cooling',
@@ -128,7 +128,7 @@ export const projects: Project[] = [
     images: [
       {
         url: '/images/projects/milan-theatre-mannarkkad.webp',
-        alt: 'Exterior facade of Milan Theatre cinema complex in Mannarkkad with central HVAC cooling installation',
+        alt: 'Exterior facade of Milan Cinemas in Mannarkkad with central HVAC cooling installation',
         kind: 'cover',
         width: 1360,
         height: 1020,
@@ -137,12 +137,12 @@ export const projects: Project[] = [
     completedAt: '2025-08-20',
   },
   {
-    slug: 'okaz-theatre-mannarkkad',
-    title: 'Okaz Theatre, Mannarkkad',
+    slug: 'okaz-cinemas-kaithachira',
+    title: 'Okaz Cinemas, Kaithachira',
     summary:
-      'Centralized cooling, ducting and mechanical ventilation execution for the Okaz Theatre entertainment complex in Mannarkkad.',
+      'Centralized cooling, ducting and mechanical ventilation execution for the Okaz Cinemas entertainment complex in Kaithachira, Mannarkkad.',
     buildingType: 'Cinema & multiplex',
-    location: 'Mannarkkad, Palakkad, Kerala',
+    location: 'Kaithachira, Mannarkkad, Kerala',
     system: 'Centralized air conditioning & ventilation',
     capacity: 'Auditorium and lobby cooling system',
     servicesProvided: [
@@ -162,11 +162,11 @@ export const projects: Project[] = [
       'Rapid cooldown response between back-to-back screenings, quiet operation during screenings, and reliable humidity management across all seasons.',
     images: [
       {
-        url: '/images/installation-crew-chiller-lift.jpg',
-        alt: 'HVAC installation team positioning central plant cooling equipment for Okaz Theatre in Mannarkkad',
+        url: '/images/projects/okaz-cinemas-kaithachira.webp',
+        alt: 'Exterior facade of Okaz Cinemas in Kaithachira with central HVAC cooling installation',
         kind: 'cover',
-        width: 1800,
-        height: 1200,
+        width: 1354,
+        height: 1020,
       },
     ],
     completedAt: '2025-05-10',
