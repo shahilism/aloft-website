@@ -7,9 +7,8 @@ const sectorIcons: IconName[] = ['office', 'coworking', 'education', 'hospitalit
 const audienceIcons: IconName[] = ['coordination', 'building', 'calendar'];
 
 /**
- * Section 10 — "Who we work with" stands in for client testimonials until
- * real, approved stories exist (content draft). Audience messages come from
- * the brand guideline and are presented as ALOFT's own words, not quotes.
+ * Section 10 — "Who we work with".
+ * Aligned architectural layout with sector ribbon and stakeholder pillars.
  */
 export function WhoWeWorkWith() {
   return (
@@ -17,36 +16,78 @@ export function WhoWeWorkWith() {
       <div className="container-page">
         <SectionHeader id="clients-title" {...home.whoWeWorkWith} />
 
-        <Reveal className="mt-12 md:mt-16">
-          <h3 className="sr-only">Target applications</h3>
-          <ul className="flex flex-wrap gap-3">
-            {home.sectors.map((s, i) => (
-              <li key={s} className="flex items-center gap-2.5 rounded-full border border-ice bg-white py-2.5 pr-5 pl-3 text-[0.9375rem] shadow-[var(--shadow-card)]">
-                <span className="grid size-8 place-items-center rounded-full bg-ice text-petrol">
-                  <Icon name={sectorIcons[i] ?? 'building'} size={17} strokeWidth={1.8} />
-                </span>
-                {s}
-              </li>
-            ))}
-          </ul>
+        {/* Minimal sector ribbon / target applications */}
+        <Reveal delay={0.08} className="mt-10 md:mt-14">
+          <div className="rounded-2xl border border-petrol/10 bg-ice/30 p-2 sm:p-2.5">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between px-3 py-2">
+              <span className="font-mono text-[0.6875rem] font-medium tracking-[0.14em] uppercase text-muted">
+                Target applications:
+              </span>
+              <ul className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                {home.sectors.map((s, i) => (
+                  <li
+                    key={s}
+                    className="inline-flex items-center gap-2 rounded-full border border-petrol/10 bg-white/80 px-3 py-1 text-[0.8125rem] text-petrol transition-colors hover:border-supply/40 hover:bg-white"
+                  >
+                    <Icon
+                      name={sectorIcons[i] ?? 'building'}
+                      size={14}
+                      strokeWidth={1.75}
+                      className="text-supply"
+                    />
+                    <span>{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </Reveal>
 
-        <ul className="mt-5 grid gap-4 md:grid-cols-3">
+        {/* 3 Stakeholder Columns (Aligned Equal-Height Cards) */}
+        <div className="mt-6 md:mt-8 grid gap-6 md:grid-cols-3 items-stretch">
           {home.audiences.map((a, i) => (
-            <li key={a.audience}>
-              <Reveal delay={i * 0.06} className="card flex h-full flex-col p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-11 place-items-center rounded-full bg-petrol text-paper">
-                    <Icon name={audienceIcons[i]} size={20} />
-                  </span>
-                  <p className="type-label text-[0.75rem] text-muted">For {a.audience.toLowerCase()}</p>
+            <Reveal key={a.audience} delay={i * 0.08} className="h-full">
+              <article className="card group flex h-full flex-col justify-between p-7 md:p-8 transition-all duration-300 hover:border-supply/40 hover:shadow-lg">
+                <div>
+                  {/* Top metadata row with index and bare floating icon */}
+                  <div className="flex items-center justify-between border-b border-petrol/10 pb-5">
+                    <span className="flex items-center gap-2.5 font-mono text-[0.75rem] font-medium tracking-[0.12em] uppercase text-muted">
+                      <span className="text-supply">[{String(i + 1).padStart(2, '0')}]</span>
+                      {a.audience}
+                    </span>
+                    <span className="flex size-9 items-center justify-center rounded-xl bg-ice/60 text-supply group-hover:bg-supply group-hover:text-white transition-colors duration-300">
+                      <Icon name={audienceIcons[i] ?? 'building'} size={18} strokeWidth={1.75} />
+                    </span>
+                  </div>
+
+                  {/* Core Axiom / Quote */}
+                  <p className="mt-6 text-[1.25rem] font-semibold leading-[1.25] tracking-[-0.015em] text-petrol md:text-[1.375rem]">
+                    &ldquo;{a.message}&rdquo;
+                  </p>
+
+                  {/* Focus narrative */}
+                  <p className="type-body mt-3 text-[0.875rem] leading-relaxed">
+                    {a.focus}
+                  </p>
                 </div>
-                <p className="mt-6 text-[1.375rem] leading-[1.2] font-medium tracking-[-0.015em]">{a.message}</p>
-                <p className="type-body mt-auto pt-6 text-[0.875rem]">{a.focus}</p>
-              </Reveal>
-            </li>
+
+                {/* Bottom micro-tags */}
+                <div className="mt-8 border-t border-petrol/10 pt-5">
+                  <div className="flex flex-wrap gap-1.5">
+                    {a.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-md bg-paper px-2 py-0.5 font-mono text-[0.6875rem] text-muted transition-colors group-hover:text-petrol"
+                      >
+                        {tag}
+                      </span>
+                    )) ?? null}
+                  </div>
+                </div>
+              </article>
+            </Reveal>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );

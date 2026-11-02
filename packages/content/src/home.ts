@@ -141,7 +141,12 @@ export const home = {
       label: 'One-time service',
       title: 'HVAC inspection',
       body: 'An assessment of your existing cooling system, its condition and maintenance requirements.',
-      points: ['Existing system review', 'Condition assessment', 'Maintenance requirements'],
+      points: [
+        'Existing system and equipment review',
+        'Operating condition assessment',
+        'Fault and wear identification',
+        'Written maintenance recommendations',
+      ],
       cta: { label: 'Request an assessment', href: '/contact?service=amc' },
       highlighted: false,
     },
@@ -150,7 +155,7 @@ export const home = {
       title: 'Annual maintenance contract',
       body: 'Planned HVAC maintenance based on equipment, site requirements and agreed service terms.',
       points: [
-        'Scheduled inspections',
+        'Scheduled periodic inspections',
         'Equipment and operating-condition checks',
         'Fault reporting and repair recommendations',
         'Maintenance records and planned service visits',
@@ -166,8 +171,8 @@ export const home = {
    */
   whoWeWorkWith: {
     eyebrow: 'Who we work with',
-    title: 'Who we work with.',
-    body: 'Our target applications include commercial offices, coworking spaces, educational institutions, hospitality properties, retail spaces and other suitable buildings.',
+    title: 'Engineered for the stakeholders who shape modern buildings.',
+    body: 'From early architectural design coordination to long-term facility management, ALOFT aligns HVAC engineering with the priorities of each project partner.',
     button: { label: 'Discuss your project', href: '/contact' },
   } satisfies SectionIntro,
 
@@ -176,8 +181,8 @@ export const home = {
     'Coworking spaces',
     'Educational institutions',
     'Hospitality properties',
-    'Retail spaces',
-    'Other suitable buildings',
+    'Retail & supermarkets',
+    'Multiplexes & auditoriums',
   ],
 
   /** Audience messages from the brand guideline (board 02). */
@@ -185,17 +190,20 @@ export const home = {
     {
       audience: 'Architects and consultants',
       message: 'Bring us in before the ceiling is drawn.',
-      focus: 'Coordination, shafts, access, plant space.',
+      focus: 'Early coordination, shafts, access, plant space.',
+      tags: ['Shaft routing', 'Plant space', 'Ceiling coordination', 'Service access'],
     },
     {
       audience: 'Building owners',
       message: 'The cheapest quotation is rarely the cheapest system.',
       focus: 'Lifecycle cost, reliability, comfort.',
+      tags: ['Lifecycle cost', 'Equipment reliability', 'Zoned efficiency', 'Tenant comfort'],
     },
     {
       audience: 'Facility managers',
       message: 'Do not wait for the breakdown.',
       focus: 'Uptime, schedules, service records.',
+      tags: ['System uptime', 'Scheduled AMC', 'Service logs', 'Rapid fault response'],
     },
   ],
 
