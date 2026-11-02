@@ -1,11 +1,14 @@
+import Image from 'next/image';
 import { home, processSteps } from '@aloft/content';
 import { Eyebrow } from '@/components/ui/Eyebrow';
 import { Icon } from '@/components/ui/Icon';
 import { Reveal } from '@/components/ui/Reveal';
 
+const PROCESS_SIZES = '(min-width: 640px) 176px, 100vw';
+
 /**
  * Section 6 — sticky intro left, stacked step cards right (reference
- * layout). Line-icon tiles stand in for the template's stock photos.
+ * layout). Minimal photographic/render tiles replace line-icon tiles.
  */
 export function ProcessSection() {
   return (
@@ -25,8 +28,20 @@ export function ProcessSection() {
                 <li key={step.title}>
                   <Reveal delay={i * 0.05}>
                     <div className="card flex flex-col gap-5 p-4 sm:flex-row sm:items-center sm:gap-6 sm:p-5 md:p-6">
-                      <div className="grid aspect-video w-full shrink-0 place-items-center rounded-[var(--radius-media)] border border-ice bg-ice/70 text-supply sm:w-44">
-                        <Icon name={step.icon} size={40} strokeWidth={1.5} />
+                      <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-[var(--radius-media)] border border-ice bg-ice/70 sm:w-44">
+                        {step.image ? (
+                          <Image
+                            src={step.image.src}
+                            alt={step.image.alt}
+                            fill
+                            sizes={PROCESS_SIZES}
+                            className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                          />
+                        ) : (
+                          <div className="grid size-full place-items-center text-supply">
+                            <Icon name={step.icon} size={40} strokeWidth={1.5} />
+                          </div>
+                        )}
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col justify-center px-1">
                         <p className="type-label text-supply">{String(i + 1).padStart(2, '0')}</p>

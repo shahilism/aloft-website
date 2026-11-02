@@ -20,6 +20,12 @@ export interface Feature {
   icon: FeatureIcon;
   title: string;
   body: string;
+  image?: {
+    src: string;
+    alt: string;
+    width?: number;
+    height?: number;
+  };
 }
 
 export interface SectionIntro {
@@ -214,21 +220,45 @@ export const processSteps: Feature[] = [
     icon: 'brief',
     title: 'Understand the requirements',
     body: 'We assess the building type, usage, cooling needs, project stage and technical constraints.',
+    image: {
+      src: '/images/process/process-1-requirements.png',
+      alt: 'Minimal architectural floor plan and building requirements assessment',
+      width: 1376,
+      height: 768,
+    },
   },
   {
     icon: 'design',
     title: 'Plan the solution',
     body: 'We evaluate appropriate HVAC configurations, equipment and installation requirements for the agreed scope.',
+    image: {
+      src: '/images/process/process-2-planning.png',
+      alt: 'Minimal engineering schematic and HVAC system planning',
+      width: 1376,
+      height: 768,
+    },
   },
   {
     icon: 'commission',
     title: 'Install and commission',
     body: 'We execute the agreed installation scope and carry out applicable testing and commissioning activities.',
+    image: {
+      src: '/images/process/process-3-installation.png',
+      alt: 'Minimal commercial HVAC equipment installation and commissioning',
+      width: 1376,
+      height: 768,
+    },
   },
   {
     icon: 'maintain',
     title: 'Maintain the system',
     body: 'Where contracted, maintenance and service support help keep equipment in suitable operating condition.',
+    image: {
+      src: '/images/process/process-4-maintenance.png',
+      alt: 'Minimalist preventive HVAC maintenance and system inspection',
+      width: 1376,
+      height: 768,
+    },
   },
 ];
 
