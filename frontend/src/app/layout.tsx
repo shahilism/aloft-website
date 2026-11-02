@@ -5,7 +5,6 @@ import { home, site } from '@aloft/content';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { JsonLd } from '@/components/JsonLd';
-import { CopperPipes } from '@/components/ui/CopperPipes';
 import { MotionProvider } from '@/components/ui/MotionProvider';
 import { gaId, gscVerification, siteUrl } from '@/lib/env';
 import { organizationJsonLd } from '@/lib/structured-data';
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <style>{'[data-reveal]{opacity:1!important;transform:none!important}'}</style>
         </noscript>
         <MotionProvider>
-          <CopperPipes />
           <Header />
           <main id="main">{children}</main>
           <Footer />
