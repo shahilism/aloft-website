@@ -60,12 +60,12 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    slug: 'budget-malappuram',
-    title: 'Budget Malappuram',
+    slug: 'hyper-budget',
+    title: 'Hyper Budget',
     summary:
-      'Commercial centralized cooling and multi-zone VRF installation for the Budget commercial and hospitality facility in Malappuram.',
+      'Commercial centralized cooling and multi-zone VRF installation for Hyper Budget commercial and retail facilities in Manjeri (Rajiv Gandhi Bypass Road) and Malappuram.',
     buildingType: 'Commercial complex',
-    location: 'Malappuram, Kerala',
+    location: 'Manjeri (Rajiv Gandhi Bypass Road) & Malappuram, Kerala',
     system: 'VRF / VRV and ducted cooling',
     capacity: 'Multi-zone commercial setup',
     servicesProvided: [
@@ -76,20 +76,27 @@ export const projects: Project[] = [
     ],
     serviceSlugs: ['vrf-vrv-systems', 'hvac-ducting'],
     challenge:
-      'The multi-storey facility required independent temperature control across diverse retail, office and guest zones with high operating efficiency and quiet indoor sound levels.',
+      'The multi-storey facilities across Manjeri (Rajiv Gandhi Bypass Road) and Malappuram required independent temperature control across retail and office zones with high operating efficiency and quiet indoor sound levels.',
     solution:
-      'ALOFT engineered a multi-zone VRF configuration paired with ductable indoor fan coils, delivering balanced air distribution, zoned thermostat control and optimized outdoor unit placement.',
+      'ALOFT engineered multi-zone VRF configurations paired with ductable indoor fan coils, delivering balanced air distribution, zoned thermostat control and optimized outdoor unit placement.',
     execution:
-      'Refrigerant piping, acoustic insulation, sheet-metal ductwork and indoor units were installed in tight coordination with ceiling frameworks and electrical services.',
+      'Refrigerant piping, acoustic insulation, sheet-metal ductwork and indoor units were installed in tight coordination with ceiling frameworks and electrical services across both locations.',
     outcome:
       'Dependable climate control across all operational zones with responsive multi-zone temperature regulation and streamlined ongoing service access.',
     images: [
       {
-        url: '/images/hero-commercial-interior.jpg',
-        alt: 'Commercial interior with installed architectural HVAC ductwork and centralized cooling at Budget Malappuram',
+        url: '/images/projects/hyper-budget-malappuram.webp',
+        alt: 'Exterior facade and commercial building of Hyper Budget on Rajiv Gandhi Bypass Road, Manjeri, with centralized HVAC air conditioning',
         kind: 'cover',
-        width: 1024,
-        height: 576,
+        width: 1360,
+        height: 928,
+      },
+      {
+        url: '/images/Hyper Budget Supermarket Plaza.png',
+        alt: 'Hyper Budget Supermarket Plaza retail interior and air conditioning ductwork in Malappuram',
+        kind: 'gallery',
+        width: 1586,
+        height: 992,
       },
     ],
     completedAt: '2025-11-15',
@@ -120,11 +127,11 @@ export const projects: Project[] = [
       'Comfortable, draft-free auditorium climate with ultra-quiet acoustic performance and uniform temperature distribution throughout the screening hall.',
     images: [
       {
-        url: '/images/ahu-plant-room-2.jpg',
-        alt: 'Commercial AHU plant room and acoustic duct distribution network serving Milan Theatre in Mannarkkad',
+        url: '/images/projects/milan-theatre-mannarkkad.webp',
+        alt: 'Exterior facade of Milan Theatre cinema complex in Mannarkkad with central HVAC cooling installation',
         kind: 'cover',
-        width: 2000,
-        height: 1500,
+        width: 1360,
+        height: 1020,
       },
     ],
     completedAt: '2025-08-20',

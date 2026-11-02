@@ -24,6 +24,25 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
+  async redirects() {
+    return [
+      {
+        source: '/projects/budget-malappuram',
+        destination: '/projects/hyper-budget',
+        permanent: true,
+      },
+      {
+        source: '/projects/hyper-budget-malappuram',
+        destination: '/projects/hyper-budget',
+        permanent: true,
+      },
+      {
+        source: '/projects/milan-cinemas-mannarkkad',
+        destination: '/projects/milan-theatre-mannarkkad',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

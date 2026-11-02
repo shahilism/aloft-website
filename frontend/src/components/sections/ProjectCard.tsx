@@ -13,9 +13,22 @@ export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: Proj
   const before = projectImage(project, 'before');
   const after = projectImage(project, 'after');
   const cover = projectCover(project);
+  const secondary = project.images.find(
+    (img) => img.url !== cover?.url && img.kind !== 'before' && img.kind !== 'after',
+  );
+
   const media =
     before && after ? (
       <BeforeAfter before={before} after={after} sizes={SIZES} className="aspect-video w-full" />
+    ) : cover && secondary ? (
+      <div className="flex flex-col gap-3">
+        <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-media)]">
+          <Image src={cover.url} alt={cover.alt} fill sizes={SIZES} className="object-cover" />
+        </div>
+        <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-media)]">
+          <Image src={secondary.url} alt={secondary.alt} fill sizes={SIZES} className="object-cover" />
+        </div>
+      </div>
     ) : cover ? (
       <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-media)]">
         <Image src={cover.url} alt={cover.alt} fill sizes={SIZES} className="object-cover" />
@@ -30,7 +43,7 @@ export function ProjectCard({ project, headingLevel: H = 'h3' }: { project: Proj
   return (
     <Reveal>
       <article className="card grid gap-5 p-3 md:grid-cols-[330px_1fr] md:gap-8">
-        <div className="md:min-h-[300px]">{media}</div>
+        <div>{media}</div>
         <div className="flex flex-col px-2 pb-3 md:px-0 md:py-5 md:pr-6">
           <H className="type-title">{project.title}</H>
           <p className="type-body mt-3 max-w-xl">{project.summary}</p>
