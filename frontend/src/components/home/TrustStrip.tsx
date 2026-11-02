@@ -28,7 +28,7 @@ const BRANDS = [
  */
 export function TrustStrip() {
   return (
-    <section aria-label="HVAC systems and equipment brands" className="pb-16 md:pb-24">
+    <section aria-label="HVAC systems and equipment brands" className="pb-8 md:pb-12">
       <div className="container-page">
         <Marquee label="Major HVAC equipment brands" className="w-full">
           {BRANDS.map(({ name, Component }) => (
