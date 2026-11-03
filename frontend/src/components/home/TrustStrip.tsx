@@ -3,22 +3,22 @@ import {
   BlueStarLogo,
   CarrierLogo,
   DaikinLogo,
+  GeneralLogo,
   LgLogo,
   MitsubishiElectricLogo,
   ToshibaLogo,
   TraneLogo,
   VoltasLogo,
-  YorkLogo,
 } from './HvacBrandLogos';
 
 const BRANDS = [
   { name: 'Daikin', Component: DaikinLogo },
   { name: 'Carrier', Component: CarrierLogo },
   { name: 'Mitsubishi Electric', Component: MitsubishiElectricLogo },
+  { name: 'General', Component: GeneralLogo },
   { name: 'Voltas', Component: VoltasLogo },
   { name: 'Blue Star', Component: BlueStarLogo },
   { name: 'Trane', Component: TraneLogo },
-  { name: 'York', Component: YorkLogo },
   { name: 'LG', Component: LgLogo },
   { name: 'Toshiba', Component: ToshibaLogo },
 ];
