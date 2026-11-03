@@ -10,6 +10,8 @@ import { ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
 
+const navItems = [{ label: 'Home', href: '/' }, ...mainNav];
+
 /**
  * Reference layout: logo left, links centred, one action right. The single
  * Copper button repeats the primary action (brand board 20).
@@ -39,7 +41,8 @@ export function Header() {
     };
   }, [open]);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <header className="sticky top-0 z-50">
@@ -61,8 +64,8 @@ export function Header() {
         <Logo priority width={180} className="-ml-3" />
 
         <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-10">
-            {mainNav.map((item) => (
+          <ul className="flex items-center gap-7 lg:gap-9">
+            {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -110,11 +113,11 @@ export function Header() {
           >
             <nav aria-label="Mobile" className="container-wide flex min-h-full flex-col pt-6 pb-10">
               <ul className="divide-y divide-ice border-y border-ice">
-                {[{ label: 'Home', href: '/' }, ...mainNav].map((item) => (
+                {navItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      aria-current={pathname === item.href ? 'page' : undefined}
+                      aria-current={isActive(item.href) ? 'page' : undefined}
                       className="flex items-center justify-between py-5 text-2xl font-medium tracking-tight"
                     >
                       {item.label}
