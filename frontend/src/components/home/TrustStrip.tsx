@@ -34,7 +34,7 @@ export function TrustStrip() {
           {BRANDS.map(({ name, Component }) => (
             <div
               key={name}
-              className="flex items-center px-4 text-petrol/75 transition-all duration-200 hover:text-petrol"
+              className="flex shrink-0 items-center justify-center text-petrol/75 transition-all duration-200 hover:text-petrol"
               title={name}
             >
               <Component className="h-7 w-auto" />

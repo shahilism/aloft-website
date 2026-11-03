@@ -15,7 +15,7 @@ export function DaikinLogo({ className }: { className?: string }) {
 
 export function MitsubishiElectricLogo({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 190 36" height="32" className={cn('h-8 w-auto', className)} aria-label="Mitsubishi Electric">
+    <svg viewBox="0 0 126 36" height="32" className={cn('h-8 w-auto', className)} aria-label="Mitsubishi Electric">
       {/* Mitsubishi Three Diamonds */}
       <g fill="#E60012">
         <polygon points="18,18 12.8,9 18,0 23.2,9" />
@@ -98,7 +98,7 @@ export function GeneralLogo({ className }: { className?: string }) {
     <Image
       src="/brand/general-inc.-logo.png"
       alt="General"
-      width={2512}
+      width={2230}
       height={320}
       className={cn('h-7 w-auto object-contain', className)}
     />
@@ -107,35 +107,13 @@ export function GeneralLogo({ className }: { className?: string }) {
 
 export function BlueStarLogo({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 160 36" height="32" className={cn('h-8 w-auto', className)} aria-label="Blue Star">
-      <polygon
-        points="16,3 19.5,12.5 29,13 21.5,19 24.5,28 16,22.5 7.5,28 10.5,19 3,13 12.5,12.5"
-        fill="#004B9B"
-      />
-      <g fill="currentColor">
-        <text
-          x="38"
-          y="19"
-          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-          fontWeight="900"
-          fontSize="16"
-          letterSpacing="0.07em"
-        >
-          BLUE STAR
-        </text>
-        <text
-          x="38"
-          y="29"
-          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-          fontWeight="600"
-          fontSize="7"
-          letterSpacing="0.14em"
-          opacity="0.75"
-        >
-          AIR CONDITIONING
-        </text>
-      </g>
-    </svg>
+    <Image
+      src="/brand/683808eb62ef3-Blue-Star.png"
+      alt="Blue Star"
+      width={955}
+      height={216}
+      className={cn('h-7 w-auto object-contain', className)}
+    />
   );
 }
 
