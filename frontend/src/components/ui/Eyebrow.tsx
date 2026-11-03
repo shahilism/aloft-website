@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 
 interface EyebrowProps {
-  children: string;
+  children: React.ReactNode;
   tone?: 'copper' | 'paper' | 'supply';
   className?: string;
 }

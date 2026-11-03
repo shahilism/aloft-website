@@ -44,7 +44,7 @@ export default function AboutPage() {
       <section className="pt-10 pb-12 md:pt-16 md:pb-16">
         <div className="container-page">
           <div className="animate-rise">
-            <Eyebrow className="mb-5">About {site.name}</Eyebrow>
+            <Eyebrow className="mb-5">{`About ${site.name}`}</Eyebrow>
             <div className="grid gap-8 md:grid-cols-12 md:items-start md:gap-10">
               <div className="md:col-span-7">
                 <h1 className="type-display">

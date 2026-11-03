@@ -98,7 +98,7 @@ export function GeneralLogo({ className }: { className?: string }) {
     <Image
       src="/brand/general-inc.-logo.png"
       alt="General"
-      width={2230}
+      width={2512}
       height={320}
       className={cn('h-7 w-auto object-contain', className)}
     />
