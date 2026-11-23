@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://aloftac.com
+Sitemap: https://aloftac.com/sitemap.xml
