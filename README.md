@@ -55,7 +55,7 @@ The repo is set up for Vercel: the root `vercel-build` script builds the content
 
 ## Before launch — needs ALOFT's input
 
-- **Set up the enquiry form service** (create a Formspree form sending to ALOFT's inbox and set `NEXT_PUBLIC_FORM_ENDPOINT`). Until then enquiries rely on the visitor sending the pre-filled email.
+- **Activate the enquiry form.** By default enquiries go through [FormSubmit](https://formsubmit.co) to `aloftac@gmail.com`. The first enquiry sends an activation email to that inbox; click its link once, and every later enquiry arrives as an email. Set `NEXT_PUBLIC_FORM_ENDPOINT` to use a different service.
 - **Confirm contact details.** Phone `+91 95449 27508`, email `aloftac@gmail.com` and Perinthalmanna, Malappuram come from ALOFT's own proposals. Working hours are hidden until supplied (`site.ts`).
 - **Real case studies and photographs.** The projects section shows an honest empty state until one is published.
 - **Legal review** of the privacy policy and terms (`legal.ts`). If a form service is used, the privacy policy should name it as a provider that processes enquiry data.

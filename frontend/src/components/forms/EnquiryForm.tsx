@@ -106,6 +106,8 @@ export function EnquiryForm({ defaultService, submitLabel = contactPage.submit }
     }
 
     const submission = toSubmission(values, pathname);
+    // FormSubmit: lay the notification email out as a table of labelled answers.
+    if (formEndpoint.includes('formsubmit.co')) submission._template = 'table';
 
     if (!formEndpoint) {
       window.location.href = toMailto(site.contact.email, submission);
@@ -122,7 +124,9 @@ export function EnquiryForm({ defaultService, submitLabel = contactPage.submit }
         body: JSON.stringify(submission),
         signal: AbortSignal.timeout(15000),
       });
-      if (res.ok) {
+      // Some services (e.g. FormSubmit) answer 200 with `success: "false"` when nothing was sent.
+      const body: { success?: boolean | string } = await res.json().catch(() => ({}));
+      if (res.ok && body.success !== false && body.success !== 'false') {
         setStatus({ kind: 'success' });
         window.gtag?.('event', 'generate_lead', { form: 'enquiry', service: values.service });
         return;
