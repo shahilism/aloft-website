@@ -2,6 +2,9 @@ import type { MetadataRoute } from 'next';
 import { projects, services } from '@aloft/content';
 import { siteUrl } from '@/lib/env';
 
+/** Generated once at build time (static export). */
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = (path: string) => `${siteUrl}${path}`;
   return [

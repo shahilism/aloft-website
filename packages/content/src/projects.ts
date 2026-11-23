@@ -92,7 +92,7 @@ export const projects: Project[] = [
         height: 928,
       },
       {
-        url: '/images/Hyper Budget Supermarket Plaza.png',
+        url: '/images/project-hyper-budget-plaza.webp',
         alt: 'Hyper Budget Supermarket Plaza retail interior and air conditioning ductwork in Malappuram',
         kind: 'gallery',
         width: 1586,

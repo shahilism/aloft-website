@@ -1,6 +1,6 @@
 # ALOFT Centralized Cooling Solutions — website
 
-Website for ALOFT, built on the layout of the [Tempra](https://tempra.framer.website) template with ALOFT's approved content and brand guideline. It is a static Next.js site with no backend or database of its own.
+Website for ALOFT, built on the layout of the [Tempra](https://tempra.framer.website) template with ALOFT's approved content and brand guideline. It is a static Next.js site, exported to plain files, with no backend or database of its own.
 
 | Part | Stack | Folder |
 |---|---|---|
@@ -45,13 +45,25 @@ The content tests enforce the brand writing rules (no `!`, no 24/7 claims, no `$
 - **Copy, services, FAQs, contact details:** `packages/content/src/*.ts`.
 - **Publishing a case study:** add an entry to `projects` in `packages/content/src/projects.ts` (the file shows a complete example) and put its photos in `frontend/public/images/projects/`. Publish only verified, client-approved projects. Its page, sitemap entry and home-page card appear automatically.
 
-## Deployment (Vercel)
+## Deployment (Hostinger)
 
-This is a single Next.js app, not a multi-service project. If Vercel offers a "multiple services" `vercel.json` with a `backend` service, ignore it: there is no backend.
+The site is a **static export**: `npm run build` writes every page as plain HTML, CSS, JS and images to `frontend/out/`. No Node.js is needed on the server, so it runs on any Hostinger plan (or any Apache/LiteSpeed host).
 
-1. When importing, set **Root Directory** to `frontend` (framework: Next.js, pinned in `frontend/vercel.json`). Leave the build, output and install commands at their defaults. Vercel installs the npm workspaces from the repository root, and the `prebuild` script compiles `packages/content` first.
-2. Environment variables: `NEXT_PUBLIC_SITE_URL` (e.g. `https://aloftac.com`), `NEXT_PUBLIC_FORM_ENDPOINT`, and optionally `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`. Set `NEXT_PUBLIC_NOINDEX=true` on preview deployments. These are baked in at build time, so redeploy after changing them.
-3. After the domain is live, submit `https://<domain>/sitemap.xml` in Google Search Console. With analytics on, enquiries fire a `generate_lead` event.
+1. Build the upload bundle on your computer:
+   ```bash
+   npm install
+   npm run hostinger        # builds the site and creates aloft-website-hostinger.zip
+   ```
+2. In Hostinger **hPanel → Websites → Manage → File Manager**, open `public_html`, delete the placeholder `default.php` if it is there, upload `aloft-website-hostinger.zip` and **Extract** it into `public_html`. `index.html` and `.htaccess` must sit directly in `public_html`, not in a subfolder.
+3. In hPanel, turn on the free **SSL certificate** for the domain.
+
+`public/.htaccess` (copied into the export) gives clean URLs (`/about` serves `about.html`), the 404 page, HTTPS, the security headers, old project-URL redirects and browser caching.
+
+Settings such as `NEXT_PUBLIC_SITE_URL` (defaults to `https://aloftac.com`), `NEXT_PUBLIC_FORM_ENDPOINT`, `NEXT_PUBLIC_GA_ID` and `NEXT_PUBLIC_GSC_VERIFICATION` are baked in at build time: put them in `frontend/.env.local`, rebuild and re-upload. To update the live site after any change, run `npm run hostinger` again and re-upload the zip.
+
+Images are served as stored (there is no image server on static hosting), so add new photos as compressed WebP or JPEG, around 1920px wide and under ~300 KB.
+
+After the domain is live, submit `https://<domain>/sitemap.xml` in Google Search Console. With analytics on, enquiries fire a `generate_lead` event.
 
 ## Before launch — needs ALOFT's input
 

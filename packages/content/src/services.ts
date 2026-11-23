@@ -89,7 +89,7 @@ export const services: Service[] = [
     ],
     cta: 'Request a VRF / VRV project quote',
     image: {
-      src: '/images/VRF : VRV systems.png',
+      src: '/images/service-vrf-vrv.webp',
       alt: 'Commercial VRF / VRV multi-zone air conditioning system installation',
       width: 1672,
       height: 941,
@@ -120,7 +120,7 @@ export const services: Service[] = [
     ],
     cta: 'Discuss your ducting project',
     image: {
-      src: '/images/Ductable AC & ducting.png',
+      src: '/images/service-ducting.webp',
       alt: 'Commercial ductable air conditioning and engineered air distribution ductwork',
       width: 1820,
       height: 864,
@@ -152,7 +152,7 @@ export const services: Service[] = [
     ],
     cta: 'Discuss your chilled-water project',
     image: {
-      src: '/images/Chilled-water systems.png',
+      src: '/images/service-chilled-water.webp',
       alt: 'Centralized chilled-water HVAC system for commercial cooling',
       width: 1983,
       height: 793,
@@ -183,7 +183,7 @@ export const services: Service[] = [
     ],
     cta: 'Request an AMC proposal',
     image: {
-      src: '/images/HVAC maintenance & AMC.png',
+      src: '/images/service-amc.webp',
       alt: 'Commercial HVAC planned maintenance and annual maintenance contract servicing',
       width: 1821,
       height: 864,

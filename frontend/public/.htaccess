@@ -1,0 +1,53 @@
+# ALOFT website — Apache / LiteSpeed rules for the static export (Hostinger).
+# This file is copied into out/ by `npm run build`; upload it with the rest of out/.
+
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+# Pages are exported as about.html, services.html + services/…; don't let Apache add "/" to folder names.
+DirectorySlash Off
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always use HTTPS.
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # Old project URLs.
+  RewriteRule ^projects/budget-malappuram/?$ /projects/hyper-budget [R=301,L]
+  RewriteRule ^projects/hyper-budget-malappuram/?$ /projects/hyper-budget [R=301,L]
+  RewriteRule ^projects/milan-theatre-mannarkkad/?$ /projects/milan-cinemas-mannarkkad [R=301,L]
+  RewriteRule ^projects/okaz-theatre-mannarkkad/?$ /projects/okaz-cinemas-kaithachira [R=301,L]
+
+  # One URL per page: /about/ -> /about
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # Clean URLs: /about serves about.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+)$ $1.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "DENY"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Scripts and styles have content hashes in their names, so they can be cached for a year.
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>

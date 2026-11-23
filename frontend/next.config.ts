@@ -6,47 +6,19 @@ const imageHosts = (process.env.PROJECT_IMAGE_HOSTS ?? '')
   .map((h) => h.trim())
   .filter(Boolean);
 
-const securityHeaders = [
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-];
-
+/**
+ * Static export: `npm run build` writes the whole site as plain files to `out/`,
+ * ready to upload to any web host (e.g. Hostinger's public_html). Security headers,
+ * old-URL redirects and clean URLs are handled by `public/.htaccess`.
+ */
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: 'export',
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
-    formats: ['image/avif', 'image/webp'],
+    // No image server on static hosting: photos are served as stored, so keep them compressed (WebP).
+    unoptimized: true,
     remotePatterns: imageHosts.map((hostname) => ({ protocol: 'https' as const, hostname })),
-  },
-  async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
-  },
-  async redirects() {
-    return [
-      {
-        source: '/projects/budget-malappuram',
-        destination: '/projects/hyper-budget',
-        permanent: true,
-      },
-      {
-        source: '/projects/hyper-budget-malappuram',
-        destination: '/projects/hyper-budget',
-        permanent: true,
-      },
-      {
-        source: '/projects/milan-theatre-mannarkkad',
-        destination: '/projects/milan-cinemas-mannarkkad',
-        permanent: true,
-      },
-      {
-        source: '/projects/okaz-theatre-mannarkkad',
-        destination: '/projects/okaz-cinemas-kaithachira',
-        permanent: true,
-      },
-    ];
   },
 };
 

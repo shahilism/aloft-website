@@ -2,7 +2,7 @@
   "name": "aloft-website",
   "version": "1.0.0",
   "private": true,
-  "description": "ALOFT Centralized Cooling Solutions — website (Next.js).",
+  "description": "ALOFT Centralized Cooling Solutions \u2014 website (Next.js).",
   "workspaces": [
     "packages/*",
     "frontend"
@@ -15,6 +15,7 @@
     "build:frontend": "npm run build:content && npm run build -w frontend",
     "vercel-build": "npm run build:content && npm run build -w frontend",
     "build": "npm run build:content && npm run build -w frontend",
+    "hostinger": "npm run build && rm -f aloft-website-hostinger.zip && cd frontend/out && zip -qr ../../aloft-website-hostinger.zip .",
     "dev": "npm run dev -w frontend",
     "lint": "npm run lint -w frontend",
     "typecheck": "npm run typecheck -w @aloft/content && npm run typecheck -w frontend",

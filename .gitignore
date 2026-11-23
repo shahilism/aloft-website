@@ -17,3 +17,6 @@ dist-test/
 
 # Old local clone of this repo; not part of the site
 /aloft-website/
+
+# Hostinger upload bundle (npm run hostinger)
+aloft-website-hostinger.zip

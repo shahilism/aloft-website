@@ -1,6 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { site } from '@aloft/content';
 
+/** Generated once at build time (static export). */
+export const dynamic = 'force-static';
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: site.legalName,

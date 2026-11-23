@@ -50,7 +50,7 @@ export const home = {
     primary: { label: 'Get a project quote', href: '/contact' },
     secondary: { label: 'Explore services', href: '#services' },
     image: {
-      src: '/images/Biophilic Industrial Café Lounge.png',
+      src: '/images/hero-cafe-lounge.webp',
       alt: 'Modern biophilic industrial café lounge with exposed architectural HVAC ductwork and centralized climate control',
       width: 1983,
       height: 793,
@@ -229,7 +229,7 @@ export const processSteps: Feature[] = [
     title: 'Understand the requirements',
     body: 'We assess the building type, usage, cooling needs, project stage and technical constraints.',
     image: {
-      src: '/images/process/process-1-requirements.png',
+      src: '/images/process/process-1-requirements.webp',
       alt: 'Minimal architectural floor plan and building requirements assessment',
       width: 1376,
       height: 768,
@@ -240,7 +240,7 @@ export const processSteps: Feature[] = [
     title: 'Plan the solution',
     body: 'We evaluate appropriate HVAC configurations, equipment and installation requirements for the agreed scope.',
     image: {
-      src: '/images/process/process-2-planning.png',
+      src: '/images/process/process-2-planning.webp',
       alt: 'Minimal engineering schematic and HVAC system planning',
       width: 1376,
       height: 768,
@@ -251,7 +251,7 @@ export const processSteps: Feature[] = [
     title: 'Install and commission',
     body: 'We execute the agreed installation scope and carry out applicable testing and commissioning activities.',
     image: {
-      src: '/images/process/process-3-installation.png',
+      src: '/images/process/process-3-installation.webp',
       alt: 'Minimal commercial HVAC equipment installation and commissioning',
       width: 1376,
       height: 768,
@@ -262,7 +262,7 @@ export const processSteps: Feature[] = [
     title: 'Maintain the system',
     body: 'Where contracted, maintenance and service support help keep equipment in suitable operating condition.',
     image: {
-      src: '/images/process/process-4-maintenance.png',
+      src: '/images/process/process-4-maintenance.webp',
       alt: 'Minimalist preventive HVAC maintenance and system inspection',
       width: 1376,
       height: 768,
