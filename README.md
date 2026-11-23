@@ -47,9 +47,9 @@ The content tests enforce the brand writing rules (no `!`, no 24/7 claims, no `$
 
 ## Deployment (Vercel)
 
-The repo is set up for Vercel: the root `vercel-build` script builds the content package and the site.
+This is a single Next.js app, not a multi-service project. If Vercel offers a "multiple services" `vercel.json` with a `backend` service, ignore it: there is no backend.
 
-1. Project root: repository root; framework: Next.js; output: `frontend/.next`.
+1. When importing, set **Root Directory** to `frontend` (framework: Next.js, pinned in `frontend/vercel.json`). Leave the build, output and install commands at their defaults. Vercel installs the npm workspaces from the repository root, and the `prebuild` script compiles `packages/content` first.
 2. Environment variables: `NEXT_PUBLIC_SITE_URL` (e.g. `https://aloftac.com`), `NEXT_PUBLIC_FORM_ENDPOINT`, and optionally `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`. Set `NEXT_PUBLIC_NOINDEX=true` on preview deployments. These are baked in at build time, so redeploy after changing them.
 3. After the domain is live, submit `https://<domain>/sitemap.xml` in Google Search Console. With analytics on, enquiries fire a `generate_lead` event.
 
