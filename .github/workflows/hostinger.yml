@@ -1,0 +1,50 @@
+# Builds the static site on every push to main and publishes the ready-to-serve
+# files (frontend/out) to the `hostinger` branch. Hostinger's Git deployment pulls
+# that branch straight into public_html; it does not run a build itself.
+name: Build for Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hostinger-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Check
+        run: |
+          npm test
+          npm run lint
+          npm run typecheck
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Publish to the hostinger branch
+        working-directory: frontend/out
+        run: |
+          test -f index.html && test -f .htaccess
+          git init -q -b hostinger
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Build of ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" hostinger
